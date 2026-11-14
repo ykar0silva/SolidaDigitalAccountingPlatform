@@ -37,7 +37,7 @@ export default function Socias() {
 
       {/* Marca d'água: só o S, atrás das cabeças */}
       <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-center">
-        <div className="relative -mt-[10px] h-[280px] w-[280px] overflow-hidden opacity-[0.10] md:mt-[60px] md:h-[480px] md:w-[480px]">
+        <div className="relative mt-[24px] h-[280px] w-[280px] overflow-hidden opacity-[0.10] md:mt-[60px] md:h-[480px] md:w-[480px]">
           <div className="absolute left-1/2 top-1/2 -ml-[241px] -mt-[527px] h-[1016px] w-[1016px] md:-ml-[450px] md:-mt-[984px] md:h-[1896px] md:w-[1896px]">
             <Image
               src={MARCA_DAGUA}
@@ -56,7 +56,7 @@ export default function Socias() {
           {/* Foto das duas */}
           <button
             onClick={() => setAberta(true)}
-            className="group relative block h-[500px] w-full md:h-[620px] rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado focus-visible:ring-offset-4 focus-visible:ring-offset-azul order-1 lg:order-none lg:col-start-2 lg:row-start-1 lg:h-[740px]"
+            className="group relative block h-[360px] w-full md:h-[620px] rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado focus-visible:ring-offset-4 focus-visible:ring-offset-azul order-1 lg:order-none lg:col-start-2 lg:row-start-1 lg:h-[740px]"
             aria-label="Conhecer a história das sócias"
           >
             <div
@@ -73,7 +73,7 @@ export default function Socias() {
               fill
               sizes="(min-width: 1024px) 768px, 100vw"
               style={{ maskImage: MASCARA_BASE, WebkitMaskImage: MASCARA_BASE }}
-              className="origin-bottom scale-[1.15] object-contain object-bottom transition-transform duration-700 group-hover:scale-[1.19] lg:scale-[1.3] lg:group-hover:scale-[1.34]"
+              className="origin-bottom object-cover object-bottom transition-transform duration-700 group-hover:scale-[1.03] md:scale-[1.15] md:object-contain md:group-hover:scale-[1.19] lg:scale-[1.3] lg:group-hover:scale-[1.34]"
             />
           </button>
 
