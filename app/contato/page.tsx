@@ -1,7 +1,5 @@
-export default function ContatoPage() {
-  return (
-    <main>
-      <h1>Contato</h1>
-    </main>
-  );
+import EmProducao from "@/components/EmProducao/EmProducao";
+
+export default function Page() {
+  return <EmProducao />;
 }

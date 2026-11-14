@@ -1,7 +1,5 @@
-export default function ServicosPage() {
-  return (
-    <main>
-      <h1>Serviços</h1>
-    </main>
-  );
+import EmProducao from "@/components/EmProducao/EmProducao";
+
+export default function Page() {
+  return <EmProducao />;
 }
