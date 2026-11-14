@@ -1,11 +1,13 @@
 import Hero from "@/components/Hero/Hero";
 import Avaliacoes from "@/components/Avaliacoes/Avaliacoes";
 import Socias from "@/components/Socias/Socias";
-import Equipe from "@/components/Equipe/Equipe";
 import Servicos from "@/components/Servicos/Servicos";
-import BlogPreview from "@/components/BlogPreview/BlogPreview";
 import FerramentasDestaque from "@/components/FerramentasDestaque/FerramentasDestaque";
 
+// Seções ainda em revisão, fora da página por enquanto (os componentes
+// continuam no projeto): Equipe (components/Equipe) e BlogPreview
+// (components/BlogPreview). Para voltar, importe e coloque abaixo das
+// ferramentas.
 
 export default function Home() {
   return (
@@ -15,8 +17,6 @@ export default function Home() {
       <Socias />
       <Servicos />
       <FerramentasDestaque />
-      <Equipe />
-      <BlogPreview />
     </main>
   );
 }
