@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { avaliacoes } from "@/data/avaliacoes";
 import { Estrelas } from "./CardGoogle";
 
@@ -26,10 +29,24 @@ function Card({ item }: { item: (typeof avaliacoes)[number] }) {
 
 export default function Avaliacoes() {
     const mask = "linear-gradient(to right, transparent, black 8%, black 92%, transparent)";
+    const [pausado, setPausado] = useState(false);
 
     return (
-        <section className="bg-creme pb-10 pt-6 md:pb-12 md:pt-8">
-            <div className="marquee overflow-hidden" style={{ maskImage: mask, WebkitMaskImage: mask }}>
+        <section className="bg-creme pb-10 pt-6 md:pb-12 md:pt-8" aria-label="Avaliações de clientes">
+            <div className="mb-4 flex justify-end px-6 md:px-12">
+                <button
+                    type="button"
+                    onClick={() => setPausado((p) => !p)}
+                    aria-pressed={pausado}
+                    className="marquee-toggle rounded-full border border-azul/20 px-4 py-1.5 font-sans text-xs font-semibold text-azul/70 transition-colors hover:border-dourado-escuro hover:text-azul focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado-escuro"
+                >
+                    {pausado ? "Retomar avaliações" : "Pausar avaliações"}
+                </button>
+            </div>
+            <div
+                className={`marquee overflow-hidden ${pausado ? "is-paused" : ""}`}
+                style={{ maskImage: mask, WebkitMaskImage: mask }}
+            >
                 <div className="marquee-track">
                     {avaliacoes.map((item, i) => (
                         <Card key={`a-${i}`} item={item} />

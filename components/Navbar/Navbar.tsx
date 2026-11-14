@@ -19,9 +19,27 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Menu mobile aberto: trava o scroll da página e fecha com Esc
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const aoTeclar = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    const overflowAnterior = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", aoTeclar);
+
+    return () => {
+      document.body.style.overflow = overflowAnterior;
+      window.removeEventListener("keydown", aoTeclar);
+    };
+  }, [menuOpen]);
 
   return (
     <header
@@ -53,30 +71,39 @@ export default function Navbar() {
 
         <button
           onClick={() => setMenuOpen(true)}
-          className="md:hidden flex flex-col gap-1.5 z-50"
+          className="group md:hidden flex flex-col gap-1.5 z-50 p-2 -m-2"
           aria-label="Abrir menu"
+          aria-expanded={menuOpen}
+          aria-controls="menu-mobile"
         >
-          <span className="w-6 h-0.5 bg-white" />
-          <span className="w-6 h-0.5 bg-white" />
-          <span className="w-6 h-0.5 bg-white" />
+          <span aria-hidden="true" className="w-6 h-0.5 bg-white transition-colors group-hover:bg-dourado" />
+          <span aria-hidden="true" className="w-6 h-0.5 bg-white transition-colors group-hover:bg-dourado" />
+          <span aria-hidden="true" className="w-6 h-0.5 bg-white transition-colors group-hover:bg-dourado" />
         </button>
       </nav>
 
       {menuOpen && (
-        <div className="fixed inset-0 bg-azul flex flex-col items-center justify-center gap-8 z-50">
+        <div
+          id="menu-mobile"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+          className="fixed inset-0 bg-azul flex flex-col items-center justify-center gap-8 z-50 overscroll-contain"
+        >
           <button
             onClick={() => setMenuOpen(false)}
-            className="absolute top-6 right-6 text-white text-3xl"
+            className="absolute top-6 right-6 text-white text-3xl transition-colors hover:text-dourado"
             aria-label="Fechar menu"
+            autoFocus
           >
-            ×
+            <span aria-hidden="true">×</span>
           </button>
           {menuItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={() => setMenuOpen(false)}
-              className="font-display text-dourado text-3xl"
+              className="font-display text-dourado text-3xl transition-colors hover:text-white"
             >
               {item.label}
             </Link>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useDialogo } from "@/lib/useDialogo";
 import {
   socias,
   historiaSolida,
@@ -14,22 +14,7 @@ type Props = {
 };
 
 export default function SociasModal({ aberta, onClose }: Props) {
-  useEffect(() => {
-    if (!aberta) return;
-
-    const aoTeclar = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    const overflowAnterior = document.body.style.overflow;
-
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", aoTeclar);
-
-    return () => {
-      document.body.style.overflow = overflowAnterior;
-      window.removeEventListener("keydown", aoTeclar);
-    };
-  }, [aberta, onClose]);
+  const { caixaRef, fecharRef } = useDialogo<HTMLDivElement>(aberta, onClose);
 
   if (!aberta) return null;
 
@@ -42,17 +27,19 @@ export default function SociasModal({ aberta, onClose }: Props) {
       aria-label="Quem está à frente da Sólida"
     >
       <div
-        className="relative max-h-[92dvh] w-full max-w-4xl overflow-y-auto rounded-t-2xl border border-dourado/30 bg-azul md:max-h-[88dvh] md:rounded-2xl"
+        ref={caixaRef}
+        className="relative max-h-[92dvh] w-full max-w-4xl overflow-y-auto overscroll-contain rounded-t-2xl border border-dourado/30 bg-azul md:max-h-[88dvh] md:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Botão de fechar: fica fixo no topo ao rolar */}
         <div className="sticky top-0 z-20 -mb-12 flex justify-end p-3">
           <button
+            ref={fecharRef}
             onClick={onClose}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-dourado/30 bg-azul/90 text-xl leading-none text-white transition-colors hover:border-dourado hover:text-dourado"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-dourado/30 bg-azul/90 text-xl leading-none text-white transition-colors hover:border-dourado hover:text-dourado focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado"
             aria-label="Fechar"
           >
-            ×
+            <span aria-hidden="true">×</span>
           </button>
         </div>
 
@@ -62,10 +49,10 @@ export default function SociasModal({ aberta, onClose }: Props) {
             <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.25em] text-dourado">
               Desde 2008
             </p>
-            <h2 className="mt-3 font-display text-3xl text-white md:text-4xl">
+            <h2 className="mt-3 font-display text-3xl text-white md:text-4xl text-balance">
               Quem está à frente da Sólida
             </h2>
-            <div className="mx-auto mt-5 h-px w-12 bg-dourado" />
+            <div aria-hidden="true" className="mx-auto mt-5 h-px w-12 bg-dourado" />
             <p className="mt-6 font-sans text-base leading-relaxed text-white/85 md:text-lg">
               {historiaSolida}
             </p>
@@ -98,7 +85,7 @@ export default function SociasModal({ aberta, onClose }: Props) {
                         key={q}
                         className="flex gap-3 font-sans text-sm leading-snug text-white/85"
                       >
-                        <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-dourado" />
+                        <span aria-hidden="true" className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-dourado" />
                         {q}
                       </li>
                     ))}
@@ -113,7 +100,7 @@ export default function SociasModal({ aberta, onClose }: Props) {
             <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.25em] text-dourado">
               Nossa missão
             </p>
-            <h3 className="mx-auto mt-3 max-w-2xl font-display text-2xl leading-snug text-white md:text-3xl">
+            <h3 className="mx-auto mt-3 max-w-2xl font-display text-2xl leading-snug text-white md:text-3xl text-balance">
               Construindo solidez e confiança desde 2008
             </h3>
             <p className="mx-auto mt-4 max-w-2xl font-sans text-sm leading-relaxed text-white/75">

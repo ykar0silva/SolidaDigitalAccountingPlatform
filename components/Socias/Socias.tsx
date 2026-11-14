@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Image from "next/image";
 import { socias } from "@/data/socias";
 import SociasModal from "@/components/SociasModal/SociasModal";
@@ -21,6 +21,7 @@ const MASCARA_BASE =
 
 export default function Socias() {
   const [aberta, setAberta] = useState(false);
+  const fechar = useCallback(() => setAberta(false), []);
   const [esquerda, direita] = socias;
 
   return (
@@ -41,7 +42,7 @@ export default function Socias() {
             <Image
               src={MARCA_DAGUA}
               alt=""
-              aria-hidden
+              aria-hidden="true"
               fill
               className="object-contain"
             />
@@ -54,7 +55,7 @@ export default function Socias() {
           {/* Foto das duas */}
           <button
             onClick={() => setAberta(true)}
-            className="group relative block h-[500px] w-full focus:outline-none md:col-start-2 md:row-start-1 md:h-[740px]"
+            className="group relative block h-[500px] w-full rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado focus-visible:ring-offset-4 focus-visible:ring-offset-azul md:col-start-2 md:row-start-1 md:h-[740px]"
             aria-label="Conhecer a história das sócias"
           >
             <div
@@ -69,7 +70,6 @@ export default function Socias() {
               src={FOTO_JUNTAS}
               alt={socias.map((s) => s.name).join(" e ")}
               fill
-              priority
               sizes="(min-width: 1024px) 768px, 100vw"
               style={{ maskImage: MASCARA_BASE, WebkitMaskImage: MASCARA_BASE }}
               className="origin-bottom scale-[1.15] object-contain object-bottom transition-transform duration-700 group-hover:scale-[1.19] md:scale-[1.3] md:group-hover:scale-[1.34]"
@@ -80,9 +80,9 @@ export default function Socias() {
           {esquerda && (
             <div className="mt-2 text-center md:col-start-1 md:row-start-1 md:mt-0 md:justify-self-end md:pr-4 md:text-right">
               <div className="mx-auto mb-4 h-px w-12 bg-dourado md:ml-auto md:mr-0" />
-              <h3 className="font-display text-2xl text-white md:text-3xl">
+              <p className="font-display text-2xl text-white md:text-3xl">
                 {esquerda.name}
-              </h3>
+              </p>
               <p className="mt-1 font-sans text-sm text-dourado">{esquerda.role}</p>
               <p className="mx-auto mt-4 max-w-xs font-sans text-sm leading-relaxed text-white/70 md:ml-auto md:mr-0 md:max-w-[15rem]">
                 {esquerda.descricao}
@@ -94,9 +94,9 @@ export default function Socias() {
           {direita && (
             <div className="mt-8 text-center md:col-start-3 md:row-start-1 md:mt-0 md:justify-self-start md:pl-4 md:text-left">
               <div className="mx-auto mb-4 h-px w-12 bg-dourado md:mx-0" />
-              <h3 className="font-display text-2xl text-white md:text-3xl">
+              <p className="font-display text-2xl text-white md:text-3xl">
                 {direita.name}
-              </h3>
+              </p>
               <p className="mt-1 font-sans text-sm text-dourado">{direita.role}</p>
               <p className="mx-auto mt-4 max-w-xs font-sans text-sm leading-relaxed text-white/70 md:mx-0 md:max-w-[15rem]">
                 {direita.descricao}
@@ -107,7 +107,7 @@ export default function Socias() {
 
         {/* Título no pé das duas */}
         <div className="pointer-events-none relative z-10 mx-auto -mt-[300px] max-w-4xl text-center md:-mt-32">
-          <h2 className="font-display text-3xl text-white md:text-5xl">
+          <h2 className="font-display text-3xl text-white md:text-5xl text-balance">
             Quem está à frente da Sólida
           </h2>
         </div>
@@ -116,7 +116,7 @@ export default function Socias() {
         <div className="relative z-10 mt-6 text-center md:mt-8">
           <button
             onClick={() => setAberta(true)}
-            className="rounded-full bg-dourado px-8 py-3 font-sans text-sm font-semibold text-azul transition-transform duration-300 hover:scale-105"
+            className="rounded-full bg-dourado px-8 py-3 font-sans text-sm font-semibold text-azul transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado focus-visible:ring-offset-4 focus-visible:ring-offset-azul"
           >
             Conhecer nossa história
           </button>
@@ -126,14 +126,14 @@ export default function Socias() {
         <ul className="mx-auto mt-12 flex max-w-3xl flex-wrap items-center justify-center gap-x-8 gap-y-2 border-t border-dourado/20 pt-6 font-sans text-sm text-white/70">
           {DESTAQUES.map((item) => (
             <li key={item} className="flex items-center gap-2">
-              <span className="h-1 w-1 rounded-full bg-dourado" />
+              <span aria-hidden="true" className="h-1 w-1 rounded-full bg-dourado" />
               {item}
             </li>
           ))}
         </ul>
       </div>
 
-      <SociasModal aberta={aberta} onClose={() => setAberta(false)} />
+      <SociasModal aberta={aberta} onClose={fechar} />
     </section>
   );
 }

@@ -1,4 +1,5 @@
 import CardGoogle from "@/components/Avaliacoes/CardGoogle";
+import VideoFundo from "./VideoFundo";
 const ruido =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
 
@@ -6,18 +7,9 @@ const ruido =
 export default function Hero() {
   return (
     <section className="relative h-[84dvh] min-h-[560px] w-full overflow-hidden bg-azul">
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 h-full w-full object-cover"
-        poster="/images/hero-poster.jpg"
-      >
-        <source src="/videos/hero.mp4" type="video/mp4" />
-      </video>
+      <VideoFundo />
 
-      <div className="absolute inset-0 bg-azul/60" />
+      <div className="pointer-events-none absolute inset-0 bg-azul/60" />
 
       <div
         className="pointer-events-none absolute inset-x-0 bottom-0 h-32 md:h-44"
@@ -48,7 +40,7 @@ export default function Hero() {
         }}
       />
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pb-32 text-center md:pb-28">
-        <h1 className="font-display text-white text-4xl md:text-6xl leading-tight max-w-3xl">
+        <h1 className="font-display text-white text-4xl md:text-6xl leading-tight max-w-3xl text-balance">
           Do jeito certo desde o início.
           <br />
           Para o seu negócio ir mais longe.

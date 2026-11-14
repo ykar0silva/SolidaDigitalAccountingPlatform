@@ -1,0 +1,613 @@
+/* ============================================================
+   Seção de ferramentas: cards alternados com painel animado.
+   Cada painel mostra uma "janela" da ferramenta em loop curto.
+   Estado base = quadro final, então com reduced-motion tudo
+   aparece parado e completo.
+   ============================================================ */
+
+.secao {
+  --tinta: #0d1b2a;
+  --tinta-suave: #56606b;
+  --destaque: #8c6239;
+  --linha: #e7dfd2;
+  --chip: #efe9e0;
+  --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+/* ---------- Card ---------- */
+
+.card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  border-radius: 28px;
+  border: 1px solid var(--linha);
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(13, 27, 42, 0.04), 0 12px 32px -12px rgba(13, 27, 42, 0.12);
+  overflow: hidden;
+}
+
+@media (min-width: 900px) {
+  .card {
+    grid-template-columns: 1fr 1fr;
+    min-height: 470px;
+  }
+  /* Alterna o lado do painel, como no layout de referência */
+  .card[data-lado="esquerda"] .painel {
+    order: -1;
+  }
+}
+
+.texto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 28px 32px;
+}
+
+@media (min-width: 900px) {
+  .texto {
+    padding: 56px 64px;
+  }
+}
+
+.eyebrow {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--destaque);
+}
+
+.titulo {
+  margin-top: 14px;
+  max-width: 15ch;
+  font-size: clamp(28px, 3.2vw, 36px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--tinta);
+  text-wrap: balance;
+}
+
+.descricao {
+  margin-top: 16px;
+  max-width: 38ch;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--tinta-suave);
+  text-wrap: pretty;
+}
+
+.chip {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-top: 28px;
+  padding: 0 14px;
+  border: 1px solid var(--linha);
+  border-radius: 10px;
+  background: var(--chip);
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--tinta);
+  transition: background-color 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.chip:hover {
+  border-color: #c9a77c;
+  background: #f6efe4;
+}
+
+.chip:active {
+  transform: translateY(1px);
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--destaque);
+  outline-offset: 3px;
+}
+
+.chipSeta {
+  transition: transform 0.2s;
+}
+
+.chip:hover .chipSeta {
+  transform: translateX(3px);
+}
+
+/* ---------- Painel ilustrativo ---------- */
+
+.painel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 380px;
+  margin: 0 6px 6px;
+  padding: 48px 20px;
+  border-radius: 22px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+@media (min-width: 900px) {
+  .painel {
+    margin: 6px;
+    padding: 56px 48px;
+  }
+}
+
+.painel[data-tom="claro"] {
+  background:
+    radial-gradient(ellipse 70% 60% at 20% 0%, rgba(255, 255, 255, 0.7), transparent 60%),
+    linear-gradient(165deg, #f7ead8 0%, #f0d9b9 55%, #e8c79c 100%);
+}
+
+.painel[data-tom="escuro"] {
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 115%, rgba(209, 168, 117, 0.55), rgba(168, 125, 79, 0.18) 45%, transparent 70%),
+    linear-gradient(180deg, #0a1520 0%, #0d1b2a 100%);
+}
+
+/* Linhas-guia e cruzes nos cantos */
+.guias {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.guias::before,
+.guias::after {
+  content: "";
+  position: absolute;
+  inset: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.guias::after {
+  inset: 28px 0;
+  border-width: 1px 0;
+}
+
+.painel[data-tom="escuro"] .guias::before,
+.painel[data-tom="escuro"] .guias::after {
+  border-color: rgba(209, 168, 117, 0.16);
+}
+
+.guias::before {
+  border-width: 0 1px;
+  inset: 0 28px;
+}
+
+.cruz {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  translate: -50% -50%;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.painel[data-tom="escuro"] .cruz {
+  color: rgba(209, 168, 117, 0.75);
+}
+
+.cruz::before,
+.cruz::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+
+.cruz::before {
+  left: 6px;
+  top: 0;
+  width: 1px;
+  height: 13px;
+}
+
+.cruz::after {
+  top: 6px;
+  left: 0;
+  width: 13px;
+  height: 1px;
+}
+
+.arco {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 520px;
+  height: 520px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.painel[data-tom="escuro"] .arco {
+  border-color: rgba(209, 168, 117, 0.12);
+}
+
+/* ---------- Janela da ferramenta ---------- */
+
+.janela {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 14px;
+  border: 1px solid #e6ded1;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(13, 27, 42, 0.06), 0 24px 48px -16px rgba(13, 27, 42, 0.35);
+  overflow: hidden;
+  color: var(--tinta);
+}
+
+.janelaTopo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #efe8dc;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--tinta-suave);
+}
+
+.janelaChips {
+  display: flex;
+  gap: 6px;
+}
+
+.janelaChip {
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: var(--chip);
+  font-size: 11px;
+  color: var(--tinta);
+}
+
+.janelaCorpo {
+  padding: 16px;
+}
+
+.janelaRodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid #efe8dc;
+  background: #faf7f2;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mono {
+  font-family: var(--mono);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Peças comuns ---------- */
+
+.linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f1ebe1;
+  font-size: 13px;
+}
+
+.linha:last-child {
+  border-bottom: 0;
+}
+
+.rotulo {
+  color: var(--tinta-suave);
+}
+
+.campo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: 9px;
+  background: #f4efe7;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.digitando {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+.selo {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.seloOk {
+  background: #e8f5ee;
+  color: #1f7a4d;
+}
+
+.seloAtencao {
+  background: #fdf1de;
+  color: #9a5b0b;
+}
+
+.seloArquivo {
+  min-width: 42px;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  background: var(--chip);
+  color: var(--tinta);
+}
+
+.barraTrilho {
+  height: 8px;
+  border-radius: 99px;
+  background: #f1ebe1;
+  overflow: hidden;
+}
+
+.barra {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #d1a875, #a87d4f);
+  transform-origin: left center;
+}
+
+.esqueleto {
+  height: 8px;
+  border-radius: 99px;
+  background: #ece5da;
+  transform-origin: left center;
+}
+
+/* ============================================================
+   Animações. Ciclo de cada painel em --ciclo.
+   ============================================================ */
+
+.anim {
+  animation-duration: var(--ciclo, 7s);
+  animation-iteration-count: infinite;
+  animation-timing-function: ease;
+  animation-fill-mode: both;
+}
+
+/* Pausa: botão da seção ou painel fora da tela */
+.secao[data-pausado] .anim,
+.painel:not([data-visivel]) .anim {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim {
+    animation: none !important;
+  }
+  .pausa {
+    display: none;
+  }
+}
+
+/* Digitação: largura em ch, passo a passo */
+@keyframes digitar1 {
+  0%, 4% { width: 0; }
+  22%, 100% { width: var(--chars); }
+}
+@keyframes digitar2 {
+  0%, 24% { width: 0; }
+  42%, 100% { width: var(--chars); }
+}
+.digitar1 { animation-name: digitar1; animation-timing-function: steps(var(--passos, 12), end); }
+.digitar2 { animation-name: digitar2; animation-timing-function: steps(var(--passos, 12), end); }
+
+/* Some no fim de cada ciclo, para recomeçar limpo */
+@keyframes aparecerEm45 {
+  0%, 44% { opacity: 0; transform: translateY(4px); }
+  50%, 94% { opacity: 1; transform: none; }
+  100% { opacity: 0; }
+}
+.aparecerEm45 { animation-name: aparecerEm45; }
+
+@keyframes encher30 {
+  0%, 48% { transform: scaleX(0); opacity: 1; }
+  66%, 94% { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+.encher { animation-name: encher30; animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+@keyframes aparecerEm62 {
+  0%, 60% { opacity: 0; transform: scale(0.92); }
+  66%, 94% { opacity: 1; transform: none; }
+  100% { opacity: 0; }
+}
+.aparecerEm62 { animation-name: aparecerEm62; }
+
+/* Barra de busca (sublinhado que avança) */
+@keyframes progresso {
+  0% { transform: scaleX(0); opacity: 1; }
+  30% { transform: scaleX(1); opacity: 1; }
+  36%, 100% { transform: scaleX(1); opacity: 0; }
+}
+.progresso {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: #a87d4f;
+  transform-origin: left center;
+  animation-name: progresso;
+  opacity: 0;
+}
+
+
+/* Linha selecionada na biblioteca */
+@keyframes selecionar {
+  0%, 58% { background-color: transparent; }
+  62%, 90% { background-color: #f6efe4; }
+  96%, 100% { background-color: transparent; }
+}
+.selecionar {
+  margin: 0 -8px;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 8px;
+  animation-name: selecionar;
+}
+
+@keyframes pressionar {
+  0%, 60% { transform: none; background-color: #fff; }
+  63% { transform: scale(0.94); background-color: #0d1b2a; color: #fff; }
+  68%, 90% { transform: none; background-color: #0d1b2a; color: #fff; }
+  96%, 100% { transform: none; background-color: #fff; }
+}
+.botaoMini {
+  padding: 4px 9px;
+  border: 1px solid #e3dacb;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #fff;
+  color: var(--tinta);
+}
+.pressionar { animation-name: pressionar; }
+
+/* Esqueleto do artigo: linhas desenhando */
+@keyframes desenhar {
+  0% { transform: scaleX(0); opacity: 1; }
+  10%, 90% { transform: scaleX(1); opacity: 1; }
+  96%, 100% { transform: scaleX(1); opacity: 0; }
+}
+.desenhar { animation-name: desenhar; animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+@keyframes ler {
+  0% { transform: scaleX(0.04); opacity: 1; }
+  92% { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+.ler {
+  animation-name: ler;
+  animation-timing-function: linear;
+}
+
+/* Glossário: três termos em revezamento */
+.termos {
+  position: relative;
+  min-height: 150px;
+}
+
+.termo {
+  position: absolute;
+  inset: 0;
+}
+
+@keyframes termo1 {
+  0% { opacity: 0; transform: translateY(8px); }
+  4%, 29% { opacity: 1; transform: none; }
+  33%, 100% { opacity: 0; transform: translateY(-8px); }
+}
+@keyframes termo2 {
+  0%, 33% { opacity: 0; transform: translateY(8px); }
+  37%, 62% { opacity: 1; transform: none; }
+  66%, 100% { opacity: 0; transform: translateY(-8px); }
+}
+@keyframes termo3 {
+  0%, 66% { opacity: 0; transform: translateY(8px); }
+  70%, 96% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: translateY(-8px); }
+}
+.termo1 { animation-name: termo1; }
+.termo2 { animation-name: termo2; }
+.termo3 { animation-name: termo3; }
+
+/* Com reduced-motion, só o primeiro termo fica visível */
+@media (prefers-reduced-motion: reduce) {
+  .termo2,
+  .termo3 {
+    display: none;
+  }
+}
+
+@keyframes marcador {
+  0% { transform: translateX(0); }
+  4%, 29% { transform: translateX(0); }
+  37%, 62% { transform: translateX(100%); }
+  70%, 96% { transform: translateX(200%); }
+  100% { transform: translateX(0); }
+}
+.abas {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 14px;
+  padding: 3px;
+  border-radius: 9px;
+  background: #f4efe7;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+.aba {
+  position: relative;
+  z-index: 1;
+  padding: 6px 0;
+}
+.abaMarcador {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc((100% - 6px) / 3);
+  border-radius: 7px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(13, 27, 42, 0.12);
+  animation-name: marcador;
+}
+
+/* Entradas em sequência: um keyframe por linha, todos no mesmo ciclo */
+@keyframes linha0 { 0%, 34% { opacity: 0; transform: translateY(6px); } 39%, 90% { opacity: 1; transform: none; } 95%, 100% { opacity: 0; } }
+.linha0 { animation-name: linha0; }
+@keyframes linha1 { 0%, 39% { opacity: 0; transform: translateY(6px); } 44%, 90% { opacity: 1; transform: none; } 95%, 100% { opacity: 0; } }
+.linha1 { animation-name: linha1; }
+@keyframes linha2 { 0%, 44% { opacity: 0; transform: translateY(6px); } 49%, 90% { opacity: 1; transform: none; } 95%, 100% { opacity: 0; } }
+.linha2 { animation-name: linha2; }
+@keyframes selo0 { 0%, 6% { opacity: 0; transform: scale(0.6); } 9%, 90% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; } }
+.selo0 { animation-name: selo0; animation-timing-function: cubic-bezier(0.3, 1.4, 0.5, 1); }
+@keyframes risco0 { 0%, 6% { text-decoration-color: transparent; } 9%, 90% { text-decoration-color: currentColor; } 94%, 100% { text-decoration-color: transparent; } }
+.risco0 { text-decoration: line-through; animation-name: risco0; }
+@keyframes selo1 { 0%, 13% { opacity: 0; transform: scale(0.6); } 16%, 90% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; } }
+.selo1 { animation-name: selo1; animation-timing-function: cubic-bezier(0.3, 1.4, 0.5, 1); }
+@keyframes risco1 { 0%, 13% { text-decoration-color: transparent; } 16%, 90% { text-decoration-color: currentColor; } 94%, 100% { text-decoration-color: transparent; } }
+.risco1 { text-decoration: line-through; animation-name: risco1; }
+@keyframes selo2 { 0%, 20% { opacity: 0; transform: scale(0.6); } 23%, 90% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; } }
+.selo2 { animation-name: selo2; animation-timing-function: cubic-bezier(0.3, 1.4, 0.5, 1); }
+@keyframes risco2 { 0%, 20% { text-decoration-color: transparent; } 23%, 90% { text-decoration-color: currentColor; } 94%, 100% { text-decoration-color: transparent; } }
+.risco2 { text-decoration: line-through; animation-name: risco2; }
+@keyframes selo3 { 0%, 27% { opacity: 0; transform: scale(0.6); } 30%, 90% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; } }
+.selo3 { animation-name: selo3; animation-timing-function: cubic-bezier(0.3, 1.4, 0.5, 1); }
+@keyframes risco3 { 0%, 27% { text-decoration-color: transparent; } 30%, 90% { text-decoration-color: currentColor; } 94%, 100% { text-decoration-color: transparent; } }
+.risco3 { text-decoration: line-through; animation-name: risco3; }
+@keyframes selo4 { 0%, 34% { opacity: 0; transform: scale(0.6); } 37%, 90% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; } }
+.selo4 { animation-name: selo4; animation-timing-function: cubic-bezier(0.3, 1.4, 0.5, 1); }
+@keyframes risco4 { 0%, 34% { text-decoration-color: transparent; } 37%, 90% { text-decoration-color: currentColor; } 94%, 100% { text-decoration-color: transparent; } }
+.risco4 { text-decoration: line-through; animation-name: risco4; }

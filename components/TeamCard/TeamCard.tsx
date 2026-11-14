@@ -16,18 +16,19 @@
       <div className="flex flex-col items-center text-center">
         <button
           onClick={() => onOpen(person)}
-          className={`group relative ${dimension} rounded-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-dourado`}
+          className={`group relative ${dimension} rounded-full overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado`}
           aria-label={`Conhecer ${person.name}`}
         >
           <Image
             src={person.photo}
             alt={person.name}
             fill
+            sizes="(min-width: 768px) 288px, 224px"
             className="object-cover"
           />
 
           {/* Overlay de hover — só desktop */}
-          <div className="hidden md:flex absolute inset-0 bg-azul/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 items-center justify-center">
+          <div aria-hidden="true" className="hidden md:flex absolute inset-0 bg-azul/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 items-center justify-center">
             <span className="font-sans text-dourado text-sm font-semibold">
               Conhecer história
             </span>
@@ -40,7 +41,7 @@
         {/* Botão "Conhecer" — só mobile */}
         <button
           onClick={() => onOpen(person)}
-          className="md:hidden mt-3 px-5 py-2 rounded-full bg-dourado text-azul text-sm font-semibold"
+          className="md:hidden mt-3 px-5 py-2 rounded-full bg-dourado text-azul text-sm font-semibold transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado"
         >
           Conhecer
         </button>

@@ -2,20 +2,25 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { gsap } from "@/lib/gsap";
 
 export default function Equipe() {
   const imageRef = useRef<HTMLDivElement>(null);
+  const sombraRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!imageRef.current) return;
+    if (!imageRef.current || !sombraRef.current) return;
 
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+
+    // A foto "acende" com o scroll: anima só a opacidade de uma camada escura
+    // (mais leve que filter) e só para quem não pediu menos movimento.
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.fromTo(
-        imageRef.current,
-        { filter: "brightness(0.05)" },
+        sombraRef.current,
+        { opacity: 0.95 },
         {
-          filter: "brightness(1)",
+          opacity: 0,
           ease: "power2.out",
           scrollTrigger: {
             trigger: imageRef.current,
@@ -27,13 +32,7 @@ export default function Equipe() {
       );
     });
 
-    const handleResize = () => ScrollTrigger.refresh();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      ctx.revert();
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => mm.revert();
   }, []);
 
   return (
@@ -46,7 +45,13 @@ export default function Equipe() {
           src="/images/team/foto-equipe.png"
           alt="Equipe Sólida Assessoria Contábil"
           fill
+          sizes="(min-width: 1152px) 1152px, 100vw"
           className="object-cover"
+        />
+        <div
+          ref={sombraRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-black opacity-0"
         />
       </div>
 

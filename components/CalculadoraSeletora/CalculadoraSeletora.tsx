@@ -10,7 +10,7 @@ export default function CalculadoraSeletora() {
 
   const visorTexto = selecionada
     ? `${selecionada.key}. ${selecionada.name.toUpperCase()}`
-    : "SELECIONE 1-6";
+    : "SELECIONE 1–6";
 
   return (
     <div className="flex flex-col md:flex-row items-center md:items-start gap-10 justify-center">
@@ -36,6 +36,8 @@ export default function CalculadoraSeletora() {
             }}
           >
             <span
+              role="status"
+              aria-live="polite"
               className="text-dourado text-sm tracking-wider"
               style={{
                 fontFamily: "'Courier New', monospace",
@@ -52,7 +54,9 @@ export default function CalculadoraSeletora() {
               <button
                 key={f.key}
                 onClick={() => setSelecionada(f)}
-                className="aspect-square rounded-xl font-display text-2xl transition-all duration-100 active:translate-y-0.5"
+                aria-label={`${f.key}: ${f.name}`}
+                aria-pressed={selecionada?.key === f.key}
+                className="aspect-square rounded-xl font-display text-2xl transition-[transform,box-shadow] duration-100 hover:brightness-110 active:translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado"
                 style={{
                   background:
                     selecionada?.key === f.key
@@ -74,7 +78,7 @@ export default function CalculadoraSeletora() {
           <button
             onClick={() => selecionada && setAberta(selecionada)}
             disabled={!selecionada}
-            className="w-full rounded-xl font-sans font-semibold py-3.5 transition-all duration-100 active:translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full rounded-xl font-sans font-semibold py-3.5 transition-[transform,opacity] duration-100 hover:brightness-110 active:translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado disabled:opacity-40 disabled:cursor-not-allowed"
             style={{
               background: "linear-gradient(145deg, #D1A875, #b8875a)",
               color: "#0D1B2A",
