@@ -8,7 +8,7 @@ export default function BlogPreview() {
   return (
     <section className="bg-white py-24 px-6">
       <div className="max-w-4xl mx-auto text-center mb-16">
-        <h2 className="font-display text-azul text-3xl md:text-4xl">
+        <h2 className="font-display text-azul text-3xl md:text-4xl text-balance">
           Últimas do blog
         </h2>
         <p className="font-sans text-azul/70 text-sm mt-3">
@@ -21,7 +21,7 @@ export default function BlogPreview() {
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="group rounded-2xl overflow-hidden bg-creme border border-azul/10 shadow-md shadow-azul/10 hover:shadow-xl hover:shadow-azul/15 hover:-translate-y-1 hover:border-dourado-escuro/50 transition-all duration-300"
+            className="group rounded-2xl overflow-hidden bg-creme border border-azul/10 shadow-md shadow-azul/10 hover:shadow-xl hover:shadow-azul/15 hover:-translate-y-1 hover:border-dourado-escuro/50 transition-[transform,box-shadow,border-color] duration-300 motion-reduce:hover:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado-escuro"
           >
             <div className="relative w-full h-48 overflow-hidden">
               <Image

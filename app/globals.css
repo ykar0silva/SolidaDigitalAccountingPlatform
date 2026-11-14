@@ -9,10 +9,28 @@
   --font-display: var(--font-dream-avenue);
 }
 
+html {
+  color-scheme: dark;
+  /* Header fixo: âncoras e foco não ficam escondidos atrás dele */
+  scroll-padding-top: 7rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a,
+button,
+[role="button"],
+input,
+select,
+textarea,
+label {
+  touch-action: manipulation;
+}
+
 body {
   background: var(--color-azul);
   color: #ffffff;
-  font-family: var(--font-sans), sans-serif;
+  /* --font-sans do @theme inline não vira variável no CSS; usar a do next/font */
+  font-family: var(--font-urbanist), sans-serif;
 }
 @keyframes crossfade {
   0%, 45% { opacity: 1; }
@@ -35,11 +53,15 @@ body {
   animation: marquee 70s linear infinite;
 }
 
-.marquee:hover .marquee-track {
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track,
+.marquee.is-paused .marquee-track {
   animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .marquee { overflow-x: auto; }
   .marquee-track { animation: none; }
+  .marquee-toggle { display: none; }
+  .crossfade-image { animation: none; }
 }

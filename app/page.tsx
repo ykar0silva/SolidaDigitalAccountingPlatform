@@ -9,7 +9,7 @@ import FerramentasDestaque from "@/components/FerramentasDestaque/FerramentasDes
 
 export default function Home() {
   return (
-    <main>
+    <main id="conteudo">
       <Hero />
       <Avaliacoes />
       <Socias />

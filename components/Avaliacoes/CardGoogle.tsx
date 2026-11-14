@@ -1,6 +1,14 @@
 import Link from "next/link";
 import { resumo, linkAvaliar } from "@/data/avaliacoes";
 
+const formatoNota = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+});
+const formatoTotal = new Intl.NumberFormat("pt-BR");
+
+const formatarNota = (nota: number) => formatoNota.format(nota);
+
 export function Estrelas({
   nota,
   className = "",
@@ -11,9 +19,17 @@ export function Estrelas({
   corCheia?: string;
 }) {
   return (
-    <div className={`flex gap-0.5 ${className}`} aria-label={`Nota ${nota} de 5`}>
+    <div
+      className={`flex gap-0.5 ${className}`}
+      role="img"
+      aria-label={`Nota ${formatarNota(nota)} de 5`}
+    >
       {[1, 2, 3, 4, 5].map((i) => (
-        <span key={i} className={i <= Math.round(nota) ? corCheia : "text-azul/15"}>
+        <span
+          key={i}
+          aria-hidden="true"
+          className={i <= Math.round(nota) ? corCheia : "text-azul/15"}
+        >
           ★
         </span>
       ))}
@@ -41,16 +57,16 @@ export default function CardGoogle() {
             <LogoGoogle />
           </span>
           <p className="font-sans text-xl font-bold text-azul md:text-2xl">
-            Avaliações do Google
+            Avaliações do <span translate="no">Google</span>
           </p>
         </div>
 
         {resumo.nota && (
           <div className="mt-2 flex items-center gap-2 font-sans">
-            <span className="text-lg font-bold text-azul">{resumo.nota.toFixed(1)}</span>
+            <span className="text-lg font-bold tabular-nums text-azul">{formatarNota(resumo.nota)}</span>
             <Estrelas nota={resumo.nota} corCheia="text-[#FBBC04]" className="text-xl" />
             {resumo.total && (
-              <span className="text-sm text-azul/60">({resumo.total})</span>
+              <span className="text-sm tabular-nums text-azul/60">({formatoTotal.format(resumo.total)})</span>
             )}
           </div>
         )}
