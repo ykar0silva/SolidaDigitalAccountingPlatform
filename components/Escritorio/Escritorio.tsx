@@ -3,13 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { fotosEscritorio, type FotoEscritorio } from "@/data/escritorio";
+import { useCarrosselInfinito } from "@/lib/useCarrosselInfinito";
 
 /* ------------------------------------------------------------------
    Galeria "Nosso escritório".
-   - A foto ativa fica nítida e maior; as próximas aparecem menores e
-     apagadas à direita.
-   - O fundo da seção é a própria foto ativa, desfocada.
-   - Setas, bolinhas, teclado (← →), deslizar o dedo e clicar na próxima.
+   - Desliza sozinha, como as avaliações: dá para segurar, arrastar e
+     arremessar (o movimento fica em lib/useCarrosselInfinito.ts).
+   - A foto que passa pelo ponto de destaque fica nítida e maior; as
+     próximas aparecem menores e apagadas, e as que passaram somem.
+   - O fundo da seção é a foto em destaque, desfocada.
+   - Setas, bolinhas e teclado (← →) levam a uma foto; clicar numa
+     foto apagada também.
 ------------------------------------------------------------------- */
 
 type Slide = FotoEscritorio | { src: null; alt: string; legenda: string };
@@ -22,15 +26,12 @@ const EXEMPLOS: Slide[] = ["Recepção", "Sala de reunião", "Atendimento", "Equ
 }));
 
 const MOSTRAR_EXEMPLOS = process.env.NODE_ENV === "development";
+const COPIAS = 4; // repetições da lista para nunca faltar foto na tela
 
 function Seta({ direcao }: { direcao: "esq" | "dir" }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" className="h-4 w-4">
-      <path
-        d={direcao === "esq" ? "M15 6l-6 6 6 6" : "M9 6l6 6-6 6"}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d={direcao === "esq" ? "M15 6l-6 6 6 6" : "M9 6l6 6-6 6"} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -57,62 +58,86 @@ export default function Escritorio() {
   const total = slides.length;
 
   const [ativo, setAtivo] = useState(0);
-  const [deslocamento, setDeslocamento] = useState(0);
-  const trilhoRef = useRef<HTMLUListElement>(null);
-  const toqueRef = useRef<number | null>(null);
+  const ativoRef = useRef(0);
 
-  const ir = (i: number) => setAtivo(((i % total) + total) % total);
+  // Cards de todas as cópias e a posição de cada um dentro do trilho
+  const cardsRef = useRef<{ el: HTMLElement; i: number; pos: number }[]>([]);
+  const passoRef = useRef(1); // distância entre um card e o próximo
 
-  // Desloca o trilho para a foto ativa ficar no ponto de partida
+  // A cada quadro: escala/opacidade por distância do ponto de destaque
+  const aoQuadro = (x: number) => {
+    const passo = passoRef.current;
+    let melhor = -1;
+    let menor = Infinity;
+    for (const c of cardsRef.current) {
+      const t = (x + c.pos) / passo; // 0 = no destaque; >0 à direita; <0 já passou
+      const d = Math.min(Math.abs(t), 1);
+      const opacidade = t < 0 ? Math.max(0, 1 + t * 1.4) : 1 - d * 0.55;
+      const escala = 1 - d * 0.08;
+      c.el.style.opacity = opacidade.toFixed(3);
+      c.el.style.transform = `scale(${escala.toFixed(4)})`;
+      if (Math.abs(t) < menor) {
+        menor = Math.abs(t);
+        melhor = c.i;
+      }
+    }
+    if (melhor >= 0 && melhor !== ativoRef.current) {
+      ativoRef.current = melhor;
+      setAtivo(melhor);
+    }
+  };
+
+  const { mov, trilhoRef, primeiraRef, propsViewport, pausado, setPausado, arrastando, irPara } =
+    useCarrosselInfinito({ velocidade: 28, aoQuadro });
+
+  // Mede a posição dos cards (e de novo quando a tela muda de tamanho)
   useEffect(() => {
     const trilho = trilhoRef.current;
     if (!trilho) return;
     const medir = () => {
-      const itens = trilho.children;
-      const primeiro = itens[0] as HTMLElement | undefined;
-      const atual = itens[ativo] as HTMLElement | undefined;
-      if (primeiro && atual) setDeslocamento(atual.offsetLeft - primeiro.offsetLeft);
+      const els = Array.from(trilho.querySelectorAll<HTMLElement>("[data-card]"));
+      cardsRef.current = els.map((el) => ({ el, i: Number(el.dataset.card), pos: el.offsetLeft }));
+      if (els.length > 1) passoRef.current = els[1].offsetLeft - els[0].offsetLeft;
     };
     medir();
     const ro = new ResizeObserver(medir);
     ro.observe(trilho);
     return () => ro.disconnect();
-  }, [ativo]);
+  }, [trilhoRef, total]);
 
   if (total === 0) return null;
 
-  const atual = slides[ativo];
+  // Leva a foto i (da primeira cópia) ao destaque, pelo caminho mais curto
+  const irParaFoto = (i: number) => {
+    const j = ((i % total) + total) % total;
+    const card = cardsRef.current.find((c) => c.i === j);
+    if (card) irPara(-card.pos);
+  };
 
   const aoTeclar = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowLeft") {
-      ir(ativo - 1);
+      irParaFoto(ativo - 1);
       e.preventDefault();
     } else if (e.key === "ArrowRight") {
-      ir(ativo + 1);
+      irParaFoto(ativo + 1);
       e.preventDefault();
     }
   };
 
+  const atual = slides[ativo] ?? slides[0];
+
   return (
-    <section
-      id="escritorio"
-      aria-labelledby="escritorio-titulo"
-      className="relative overflow-hidden bg-creme py-16 md:py-20"
-    >
-      {/* Fundo: foto ativa desfocada, com véu creme por cima */}
+    <section id="escritorio" aria-labelledby="escritorio-titulo" className="relative overflow-hidden bg-creme py-16 md:py-20">
+      {/* Fundo: foto em destaque desfocada, com véu creme por cima */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         {slides.map((s, i) => (
           <div
             key={`fundo-${i}`}
-            className={`absolute inset-0 scale-110 blur-2xl transition-opacity duration-700 motion-reduce:transition-none ${
+            className={`absolute inset-0 scale-110 blur-2xl transition-opacity duration-1000 motion-reduce:transition-none ${
               i === ativo ? "opacity-100" : "opacity-0"
             }`}
           >
-            {s.src ? (
-              <Image src={s.src} alt="" fill sizes="640px" className="object-cover" />
-            ) : (
-              <Moldura legenda="" fundo />
-            )}
+            {s.src ? <Image src={s.src} alt="" fill sizes="640px" className="object-cover" /> : <Moldura legenda="" fundo />}
           </div>
         ))}
         <div className="absolute inset-0 bg-creme/75" />
@@ -129,71 +154,60 @@ export default function Escritorio() {
         </div>
 
         {/* Carrossel */}
-        <div
-          role="region"
-          aria-roledescription="carrossel"
-          aria-label="Fotos do escritório. Use as setas do teclado para navegar."
-          tabIndex={0}
-          onKeyDown={aoTeclar}
-          className="relative mt-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#8C6239] md:mt-4"
-        >
-          <ul
-            ref={trilhoRef}
-            onPointerDown={(e) => (toqueRef.current = e.clientX)}
-            onPointerUp={(e) => {
-              if (toqueRef.current === null) return;
-              const dx = e.clientX - toqueRef.current;
-              toqueRef.current = null;
-              if (Math.abs(dx) > 50) ir(ativo + (dx < 0 ? 1 : -1));
-            }}
-            onPointerCancel={() => (toqueRef.current = null)}
-            style={{ transform: `translate3d(${-deslocamento}px,0,0)` }}
-            className="flex items-center gap-4 pl-6 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] [touch-action:pan-y] motion-reduce:transition-none md:gap-6 md:pl-[40%]"
+        <div className="relative mt-10 md:mt-4">
+          <div
+            {...propsViewport}
+            role="region"
+            aria-roledescription="carrossel"
+            aria-label="Fotos do escritório. Arraste ou use as setas do teclado para navegar."
+            tabIndex={0}
+            onKeyDown={aoTeclar}
+            className={`overflow-hidden py-4 pl-6 [touch-action:pan-y] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#8C6239] md:pl-[40%] ${
+              arrastando ? "cursor-grabbing" : "cursor-grab"
+            }`}
           >
-            {slides.map((s, i) => {
-              const eAtivo = i === ativo;
-              const passou = i < ativo;
-              return (
-                <li
-                  key={`${s.legenda}-${i}`}
-                  role="group"
-                  aria-roledescription="slide"
-                  aria-label={`${i + 1} de ${total}: ${s.legenda}`}
-                  aria-hidden={!eAtivo}
-                  className={`relative aspect-[9/16] w-[62vw] max-w-[300px] shrink-0 overflow-hidden rounded-2xl shadow-xl shadow-azul/10 transition-[opacity,transform] duration-700 motion-reduce:transition-none md:w-[270px] lg:w-[290px] ${
-                    eAtivo ? "scale-100 opacity-100" : passou ? "scale-90 opacity-0" : "scale-[0.92] opacity-45"
-                  }`}
+            <div ref={trilhoRef} className="relative flex w-max will-change-transform">
+              {Array.from({ length: COPIAS }, (_, copia) => (
+                <div
+                  key={copia}
+                  ref={copia === 0 ? primeiraRef : undefined}
+                  className="flex"
+                  aria-hidden={copia > 0 ? true : undefined}
                 >
-                  {s.src ? (
-                    <Image
-                      src={s.src}
-                      alt={s.alt}
-                      fill
-                      sizes="(min-width: 768px) 290px, 62vw"
-                      draggable={false}
-                      className="select-none object-cover"
-                    />
-                  ) : (
-                    <Moldura legenda={s.legenda} />
-                  )}
-                  {!eAtivo && !passou && (
-                    <button
-                      type="button"
-                      tabIndex={-1}
-                      onClick={() => ir(i)}
-                      aria-label={`Ver ${s.legenda}`}
-                      className="absolute inset-0 cursor-pointer bg-creme/30"
-                    />
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+                  {slides.map((s, i) => (
+                    <div
+                      key={`${copia}-${i}`}
+                      data-card={i}
+                      onClick={(e) => {
+                        // Clique (sem arrastar) numa foto leva ela ao destaque
+                        if (mov.current.arrastou > 6) return;
+                        irPara(-e.currentTarget.offsetLeft);
+                      }}
+                      className="relative mr-4 aspect-[9/16] w-[62vw] max-w-[300px] shrink-0 select-none overflow-hidden rounded-2xl shadow-xl shadow-azul/10 will-change-transform md:mr-6 md:w-[270px] lg:w-[290px]"
+                    >
+                      {s.src ? (
+                        <Image
+                          src={s.src}
+                          alt={copia === 0 ? s.alt : ""}
+                          fill
+                          sizes="(min-width: 768px) 290px, 62vw"
+                          draggable={false}
+                          className="pointer-events-none object-cover"
+                        />
+                      ) : (
+                        <Moldura legenda={s.legenda} />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
 
-          {/* Setas */}
+          {/* Setas (no celular a navegação é arrastando) */}
           <button
             type="button"
-            onClick={() => ir(ativo - 1)}
+            onClick={() => irParaFoto(ativo - 1)}
             aria-label="Foto anterior"
             className="absolute left-3 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white text-azul shadow-md shadow-azul/15 transition-colors hover:bg-dourado focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C6239] md:left-10 md:flex"
           >
@@ -201,7 +215,7 @@ export default function Escritorio() {
           </button>
           <button
             type="button"
-            onClick={() => ir(ativo + 1)}
+            onClick={() => irParaFoto(ativo + 1)}
             aria-label="Próxima foto"
             className="absolute right-3 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white text-azul shadow-md shadow-azul/15 transition-colors hover:bg-dourado focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C6239] md:right-10 md:flex"
           >
@@ -209,17 +223,15 @@ export default function Escritorio() {
           </button>
         </div>
 
-        {/* Legenda + bolinhas */}
-        <div className="mt-8 px-6 md:-mt-16 md:px-16">
-          <p aria-live="polite" className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-[#8C6239]">
-            {atual.legenda}
-          </p>
+        {/* Legenda + bolinhas + pausa */}
+        <div className="mt-6 px-6 md:-mt-16 md:px-16">
+          <p className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-[#8C6239]">{atual.legenda}</p>
           <div className="mt-4 flex items-center gap-1">
             {slides.map((s, i) => (
               <button
                 key={`ponto-${i}`}
                 type="button"
-                onClick={() => ir(i)}
+                onClick={() => irParaFoto(i)}
                 aria-label={`Ir para a foto ${i + 1}: ${s.legenda}`}
                 aria-current={i === ativo ? "true" : undefined}
                 className="group flex h-6 items-center px-1 focus-visible:outline-none"
@@ -231,6 +243,24 @@ export default function Escritorio() {
                 />
               </button>
             ))}
+            <button
+              type="button"
+              onClick={() => setPausado((p) => !p)}
+              aria-pressed={pausado}
+              aria-label={pausado ? "Retomar fotos" : "Pausar fotos"}
+              className="marquee-toggle ml-3 flex h-8 w-8 items-center justify-center rounded-full border border-azul/20 text-azul/70 transition-colors hover:border-dourado-escuro hover:text-azul focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C6239]"
+            >
+              {pausado ? (
+                <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
+                  <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
+                  <rect x="6" y="5" width="4" height="14" rx="1" />
+                  <rect x="14" y="5" width="4" height="14" rx="1" />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
       </div>
