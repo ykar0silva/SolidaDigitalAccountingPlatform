@@ -42,26 +42,13 @@ body {
   animation: crossfade 6s infinite;
 }
 
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 70s linear infinite;
-}
-
-.marquee:hover .marquee-track,
-.marquee:focus-within .marquee-track,
-.marquee.is-paused .marquee-track {
-  animation-play-state: paused;
+/* Janela do chat do WhatsApp */
+@keyframes chatEntrar {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee { overflow-x: auto; }
-  .marquee-track { animation: none; }
   .marquee-toggle { display: none; }
   .crossfade-image { animation: none; }
 }

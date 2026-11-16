@@ -3,6 +3,7 @@ import Avaliacoes from "@/components/Avaliacoes/Avaliacoes";
 import Socias from "@/components/Socias/Socias";
 import Servicos from "@/components/Servicos/Servicos";
 import FerramentasDestaque from "@/components/FerramentasDestaque/FerramentasDestaque";
+import ContatoSecao from "@/components/Contato/ContatoSecao";
 
 // Seções ainda em revisão, fora da página por enquanto (os componentes
 // continuam no projeto): Equipe (components/Equipe) e BlogPreview
@@ -17,6 +18,7 @@ export default function Home() {
       <Socias />
       <Servicos />
       <FerramentasDestaque />
+      <ContatoSecao />
     </main>
   );
 }
