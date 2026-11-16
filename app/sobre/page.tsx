@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { socias, historiaSolida, missaoSolida, valoresSolida } from "@/data/socias";
+import Image from "next/image";
+import { socias, historiaSolida, missaoSolida, valoresSolida, equipe } from "@/data/socias";
 import { propsWhatsApp } from "@/data/contato";
 
 export const metadata: Metadata = {
@@ -8,8 +9,7 @@ export const metadata: Metadata = {
     "Conheça a história da Sólida Assessoria Contábil, fundada em 2008 em Palmas-TO pelas irmãs Cleia e Núbia Fernandes.",
 };
 
-// Página Sobre: história, sócias, missão e valores.
-// Equipe e fotos do escritório entram aqui quando as fotos chegarem.
+// Página Sobre: história, sócias, equipe, missão e valores.
 export default function Page() {
   return (
     <main id="conteudo" className="bg-azul">
@@ -63,6 +63,48 @@ export default function Page() {
               </div>
             </article>
           ))}
+        </div>
+      </section>
+
+      {/* Equipe */}
+      <section aria-labelledby="equipe-titulo" className="border-t border-dourado/15 px-6 py-16 md:py-24">
+        <div className="mx-auto grid max-w-5xl items-center gap-10 md:grid-cols-[1.1fr_1fr] md:gap-14">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-dourado/20 bg-white/[0.04]">
+            {equipe.foto ? (
+              <Image
+                src={equipe.foto}
+                alt={equipe.fotoAlt}
+                fill
+                sizes="(min-width: 1024px) 540px, 100vw"
+                className="object-cover"
+              />
+            ) : (
+              // Sem foto ainda: moldura neutra no lugar
+              <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true" className="h-10 w-10 text-dourado/50">
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <circle cx="9" cy="10" r="2" />
+                  <path d="m21 16-5-5-8 8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <p className="font-sans text-xs uppercase tracking-[0.2em] text-white/40">Foto da equipe</p>
+              </div>
+            )}
+          </div>
+
+          <div>
+            <p className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-dourado">
+              Nossa equipe
+            </p>
+            <h2 id="equipe-titulo" className="mt-3 font-display text-3xl leading-snug text-white text-balance md:text-4xl">
+              {equipe.titulo}
+            </h2>
+            <div aria-hidden="true" className="mt-5 h-px w-12 bg-dourado" />
+            {equipe.paragrafos.map((p) => (
+              <p key={p} className="mt-5 font-sans text-base leading-relaxed text-white/80">
+                {p}
+              </p>
+            ))}
+          </div>
         </div>
       </section>
 
