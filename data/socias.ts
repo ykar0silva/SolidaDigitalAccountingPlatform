@@ -16,7 +16,7 @@ export const socias: Socia[] = [
     role: "Sócia-fundadora",
     descricao:
       "Com visão estratégica e dedicação, transforma desafios contábeis em oportunidades de crescimento para os clientes.",
-    foto: null,
+    foto: "/images/socias/cleia.webp",
     qualificacoes: [
       "Graduada em Ciências Contábeis",
       "Graduada em Direito",
@@ -32,7 +32,7 @@ export const socias: Socia[] = [
     role: "Sócia-fundadora",
     descricao:
       "Alia conhecimento técnico e sensibilidade para oferecer um atendimento próximo e humanizado.",
-    foto: null,
+    foto: "/images/socias/nubia.webp",
     qualificacoes: [
       "Graduada em Ciências Contábeis",
       "Pós-graduação em Gerência Contábil, Auditoria e Controladoria",
