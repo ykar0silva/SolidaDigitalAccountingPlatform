@@ -19,8 +19,8 @@ const fases: { nome: string; chamada: string; acao: string; foto: string | null;
     nome: "Manter em dia",
     chamada: "Para a rotina fiscal, contábil e da folha andar sem atraso.",
     acao: "Quero a rotina em dia",
-    foto: null,
-    fotoAlt: "",
+    foto: "/images/servicos/manter.webp",
+    fotoAlt: "Mãos usando notebook e calculadora sobre notas fiscais",
     servicos: ["Escrituração Fiscal", "Escrituração Contábil", "Gestão de Pessoal"],
   },
   {
