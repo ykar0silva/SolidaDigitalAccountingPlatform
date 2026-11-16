@@ -88,7 +88,7 @@ export default function Escritorio() {
     }
   };
 
-  const { mov, trilhoRef, primeiraRef, propsViewport, pausado, setPausado, arrastando, irPara } =
+  const { mov, trilhoRef, primeiraRef, propsViewport, arrastando, irPara } =
     useCarrosselInfinito({ velocidade: 28, aoQuadro });
 
   // Mede a posição dos cards (e de novo quando a tela muda de tamanho)
@@ -224,7 +224,7 @@ export default function Escritorio() {
           </button>
         </div>
 
-        {/* Legenda + bolinhas + pausa */}
+        {/* Legenda + bolinhas */}
         <div className="mt-6 px-6 md:px-16">
           <p className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-[#8C6239]">{atual.legenda}</p>
           <div className="mt-4 flex items-center gap-1">
@@ -244,24 +244,6 @@ export default function Escritorio() {
                 />
               </button>
             ))}
-            <button
-              type="button"
-              onClick={() => setPausado((p) => !p)}
-              aria-pressed={pausado}
-              aria-label={pausado ? "Retomar fotos" : "Pausar fotos"}
-              className="marquee-toggle ml-3 flex h-8 w-8 items-center justify-center rounded-full border border-azul/20 text-azul/70 transition-colors hover:border-dourado-escuro hover:text-azul focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C6239]"
-            >
-              {pausado ? (
-                <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
-                  <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" />
-                </svg>
-              ) : (
-                <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
-                  <rect x="6" y="5" width="4" height="14" rx="1" />
-                  <rect x="14" y="5" width="4" height="14" rx="1" />
-                </svg>
-              )}
-            </button>
           </div>
         </div>
       </div>

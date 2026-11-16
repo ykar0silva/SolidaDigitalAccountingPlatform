@@ -372,8 +372,7 @@
   animation-fill-mode: both;
 }
 
-/* Pausa: botão da seção ou painel fora da tela */
-.secao[data-pausado] .anim,
+/* Pausa: painel fora da tela */
 .painel:not([data-visivel]) .anim {
   animation-play-state: paused;
 }
@@ -381,9 +380,6 @@
 @media (prefers-reduced-motion: reduce) {
   .anim {
     animation: none !important;
-  }
-  .pausa {
-    display: none;
   }
 }
 

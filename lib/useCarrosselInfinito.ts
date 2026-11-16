@@ -8,8 +8,8 @@ import { useEffect, useRef, useState } from "react";
    - Segurar (dedo ou mouse) para; arrastar move para frente ou para trás.
    - Soltar com força: continua rápido e vai desacelerando até voltar
      à velocidade normal (inércia).
-   - Pausa com o mouse em cima, com foco de teclado, com o botão de
-     pausa, fora da tela e com "reduzir movimento" no sistema.
+   - Pausa com o mouse em cima, com foco de teclado, fora da tela e com
+     "reduzir movimento" no sistema.
    - irPara(x): desliza suavemente até uma posição e volta a andar.
 
    Estrutura esperada:
@@ -30,7 +30,6 @@ type Opcoes = {
 };
 
 export function useCarrosselInfinito({ velocidade = 32, aoQuadro }: Opcoes = {}) {
-  const [pausado, setPausado] = useState(false);
   const [arrastando, setArrastando] = useState(false);
 
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -48,7 +47,6 @@ export function useCarrosselInfinito({ velocidade = 32, aoQuadro }: Opcoes = {})
     arrastou: 0, // distância arrastada no último toque (para ignorar o clique)
     sobre: false,
     foco: false,
-    pausado: false,
     visivel: true,
     menosMovimento: false,
     amostras: [] as { x: number; t: number }[],
@@ -57,10 +55,6 @@ export function useCarrosselInfinito({ velocidade = 32, aoQuadro }: Opcoes = {})
   useEffect(() => {
     aoQuadroRef.current = aoQuadro;
   }, [aoQuadro]);
-
-  useEffect(() => {
-    mov.current.pausado = pausado;
-  }, [pausado]);
 
   useEffect(() => {
     const m = mov.current;
@@ -100,7 +94,7 @@ export function useCarrosselInfinito({ velocidade = 32, aoQuadro }: Opcoes = {})
             m.v = 0;
           }
         } else {
-          const parado = m.pausado || m.sobre || m.foco || m.menosMovimento;
+          const parado = m.sobre || m.foco || m.menosMovimento;
           const alvo = parado ? 0 : -velocidade;
           // Inércia: a velocidade volta aos poucos para o alvo
           m.v = alvo + (m.v - alvo) * Math.exp(-ATRITO * dt);
@@ -222,5 +216,5 @@ export function useCarrosselInfinito({ velocidade = 32, aoQuadro }: Opcoes = {})
     onPointerCancel: aoSoltar,
   };
 
-  return { mov, trilhoRef, primeiraRef, propsViewport, pausado, setPausado, arrastando, irPara, empurrar };
+  return { mov, trilhoRef, primeiraRef, propsViewport, arrastando, irPara, empurrar };
 }

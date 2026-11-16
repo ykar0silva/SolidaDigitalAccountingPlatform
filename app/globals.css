@@ -49,6 +49,5 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee-toggle { display: none; }
   .crossfade-image { animation: none; }
 }

@@ -274,13 +274,10 @@ function Painel({ ferramenta, tom }: { ferramenta: FerramentaDestaque; tom: "cla
 /* ---------------- Seção ---------------- */
 
 export default function FerramentasDestaque() {
-  const [pausado, setPausado] = useState(false);
-
   return (
     <section
       id="ferramentas"
       className={cx(s.secao, "bg-creme px-4 py-24 md:px-6 md:py-32")}
-      data-pausado={pausado ? "" : undefined}
       aria-labelledby="ferramentas-titulo"
     >
       <div className="mx-auto max-w-[1080px]">
@@ -296,17 +293,6 @@ export default function FerramentasDestaque() {
               Recursos para cuidar da sua empresa
             </h2>
           </div>
-          <button
-            type="button"
-            onClick={() => setPausado((p) => !p)}
-            aria-pressed={pausado}
-            className={cx(
-              s.pausa,
-              "min-h-11 shrink-0 rounded-full border border-azul/20 px-5 font-sans text-sm font-semibold text-azul/75 transition-colors hover:border-[#8C6239] hover:text-azul focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C6239]"
-            )}
-          >
-            {pausado ? "Retomar animações" : "Pausar animações"}
-          </button>
         </div>
 
         <ul className="flex flex-col gap-6 md:gap-8">
