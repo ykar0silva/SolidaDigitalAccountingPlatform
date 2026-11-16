@@ -24,10 +24,6 @@ export default function Page() {
     const p = propsWhatsApp("Olá! Vim pelo site e quero falar com a Sólida.");
     canais.push({ rotulo: "WhatsApp", valor: formatarWhatsApp(contato.whatsapp), href: p.href, externo: true, acao: "Chamar no WhatsApp" });
   }
-  if (contato.telefone && whatsappEhTelefone) {
-    // Mesmo número do WhatsApp: um cartão para ligar logo abaixo
-    canais.push({ rotulo: "Telefone", valor: contato.telefone, href: linkTelefone(contato.telefone), acao: "Ligar" });
-  }
   if (contato.telefone && !whatsappEhTelefone) {
     canais.push({ rotulo: "Telefone", valor: contato.telefone, href: linkTelefone(contato.telefone), acao: "Ligar" });
   }

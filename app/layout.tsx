@@ -3,6 +3,7 @@ import "./globals.css";
 import { urbanist, dreamAvenue } from "@/lib/fonts";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
+import WhatsAppChat from "@/components/WhatsAppChat/WhatsAppChat";
 
 
 export const metadata: Metadata = {
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Navbar />
         {children}
         <Footer />
+        <WhatsAppChat />
       </body>
     </html>
   );

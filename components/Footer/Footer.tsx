@@ -132,7 +132,7 @@ export default function Footer() {
               {contato.whatsapp && (
                 <li>
                   <a {...propsWhatsApp("Olá! Vim pelo site.")} className={linkClasse}>
-                    {whatsappEhTelefone ? "Telefone e WhatsApp" : "WhatsApp"} {formatarWhatsApp(contato.whatsapp)}
+                    WhatsApp {formatarWhatsApp(contato.whatsapp)}
                   </a>
                 </li>
               )}
