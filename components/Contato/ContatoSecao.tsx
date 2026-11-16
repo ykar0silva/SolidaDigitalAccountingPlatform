@@ -1,5 +1,4 @@
 import ContatoBloco from "./ContatoBloco";
-import FotosEscritorio from "./FotosEscritorio";
 
 // Seção de contato da home: chamada + WhatsApp, endereço, horário e mapa.
 export default function ContatoSecao() {
@@ -16,7 +15,6 @@ export default function ContatoSecao() {
           </p>
         </div>
         <ContatoBloco />
-        <FotosEscritorio />
       </div>
     </section>
   );
