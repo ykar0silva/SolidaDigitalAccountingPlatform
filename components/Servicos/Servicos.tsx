@@ -1,5 +1,5 @@
 import { servicos, type Servico } from "@/data/servicos";
-import { linkWhatsApp } from "@/data/contato";
+import { propsWhatsApp } from "@/data/contato";
 
 // Serviços agrupados pelo momento da empresa. Os nomes precisam bater
 // com os títulos em data/servicos.ts; o que não estiver em nenhum grupo
@@ -99,9 +99,7 @@ export default function Servicos() {
                   {fase.itens.map((servico) => (
                     <li key={servico.titulo} className="border-b border-azul/10 last:border-b-0">
                       <a
-                        href={linkWhatsApp(`Olá! Quero saber mais sobre ${servico.titulo}.`)}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        {...propsWhatsApp(`Olá! Quero saber mais sobre ${servico.titulo}.`)}
                         className="group -mx-3 flex items-start gap-4 rounded-xl px-3 py-4 transition-colors hover:bg-creme focus-visible:bg-creme focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C6239]"
                       >
                         <span className="min-w-0 flex-1">
@@ -122,7 +120,7 @@ export default function Servicos() {
                         <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-azul/15 text-azul transition-colors duration-300 group-hover:border-dourado group-hover:bg-dourado">
                           <Seta className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                         </span>
-                        <span className="sr-only">(abre o WhatsApp)</span>
+                        
                       </a>
                     </li>
                   ))}
@@ -130,14 +128,12 @@ export default function Servicos() {
 
                 <div className="mt-auto pt-6">
                   <a
-                    href={linkWhatsApp(`Olá! ${fase.acao}. Podemos conversar?`)}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    {...propsWhatsApp(`Olá! ${fase.acao}. Podemos conversar?`)}
                     className="flex min-h-12 items-center justify-center gap-2 rounded-full border border-azul/20 px-5 font-sans text-sm font-semibold text-azul transition-colors hover:border-azul hover:bg-azul hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C6239]"
                   >
                     {fase.acao}
                     <Seta className="h-4 w-4" />
-                    <span className="sr-only">(abre o WhatsApp)</span>
+                    
                   </a>
                 </div>
               </div>

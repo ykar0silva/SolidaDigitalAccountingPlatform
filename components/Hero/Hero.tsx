@@ -1,5 +1,6 @@
 import CardGoogle from "@/components/Avaliacoes/CardGoogle";
 import VideoFundo from "./VideoFundo";
+import { propsWhatsApp, temWhatsApp } from "@/data/contato";
 const ruido =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
 
@@ -46,12 +47,10 @@ export default function Hero() {
           Para o seu negócio ir mais longe.
         </h1>
         <a
-          href="https://wa.me/NUMERO_AQUI?text=MENSAGEM_AQUI"
-          target="_blank"
-          rel="noopener noreferrer"
+          {...propsWhatsApp("Olá! Vim pelo site e quero falar com a Sólida.")}
           className="mt-8 px-8 py-3 rounded-full bg-dourado text-azul font-sans font-semibold hover:opacity-90 transition-opacity"
         >
-          Fale com a gente no WhatsApp
+          {temWhatsApp ? "Fale com a gente no WhatsApp" : "Fale com a gente"}
         </a>
       </div>
 
