@@ -312,17 +312,6 @@
   color: var(--tinta-suave);
 }
 
-.campo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 12px;
-  border-radius: 9px;
-  background: #f4efe7;
-  font-family: var(--mono);
-  font-size: 13px;
-}
-
 .digitando {
   display: inline-block;
   overflow: hidden;
@@ -349,16 +338,6 @@
 .seloAtencao {
   background: #fdf1de;
   color: #9a5b0b;
-}
-
-.seloArquivo {
-  min-width: 42px;
-  justify-content: center;
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  background: var(--chip);
-  color: var(--tinta);
 }
 
 .barraTrilho {
@@ -441,56 +420,6 @@
   100% { opacity: 0; }
 }
 .aparecerEm62 { animation-name: aparecerEm62; }
-
-/* Barra de busca (sublinhado que avança) */
-@keyframes progresso {
-  0% { transform: scaleX(0); opacity: 1; }
-  30% { transform: scaleX(1); opacity: 1; }
-  36%, 100% { transform: scaleX(1); opacity: 0; }
-}
-.progresso {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 2px;
-  background: #a87d4f;
-  transform-origin: left center;
-  animation-name: progresso;
-  opacity: 0;
-}
-
-
-/* Linha selecionada na biblioteca */
-@keyframes selecionar {
-  0%, 58% { background-color: transparent; }
-  62%, 90% { background-color: #f6efe4; }
-  96%, 100% { background-color: transparent; }
-}
-.selecionar {
-  margin: 0 -8px;
-  padding-left: 8px;
-  padding-right: 8px;
-  border-radius: 8px;
-  animation-name: selecionar;
-}
-
-@keyframes pressionar {
-  0%, 60% { transform: none; background-color: #fff; }
-  63% { transform: scale(0.94); background-color: #0d1b2a; color: #fff; }
-  68%, 90% { transform: none; background-color: #0d1b2a; color: #fff; }
-  96%, 100% { transform: none; background-color: #fff; }
-}
-.botaoMini {
-  padding: 4px 9px;
-  border: 1px solid #e3dacb;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 700;
-  background: #fff;
-  color: var(--tinta);
-}
-.pressionar { animation-name: pressionar; }
 
 /* Esqueleto do artigo: linhas desenhando */
 @keyframes desenhar {

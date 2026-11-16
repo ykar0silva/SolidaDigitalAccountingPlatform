@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { navegacao } from "@/data/navegacao";
 import {
   contato,
   enderecoCompleto,
@@ -9,15 +10,6 @@ import {
   temWhatsApp,
   whatsappEhTelefone,
 } from "@/data/contato";
-
-const navegacao = [
-  { label: "Início", href: "/" },
-  { label: "Sobre", href: "/sobre" },
-  { label: "Serviços", href: "/servicos" },
-  { label: "Ferramentas", href: "/ferramentas" },
-  { label: "Blog", href: "/blog" },
-  { label: "Contato", href: "/contato" },
-];
 
 const fases = [
   { label: "Abrir a empresa", href: "/#servicos" },

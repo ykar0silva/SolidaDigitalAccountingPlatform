@@ -14,7 +14,6 @@ const cx = (...classes: (string | false | undefined)[]) => classes.filter(Boolea
 
 const chamadas: Record<string, { titulo: string; acao: string }> = {
   calculadoras: { titulo: "Faça as contas antes de decidir.", acao: "Abrir calculadoras" },
-  biblioteca: { titulo: "Modelos prontos para baixar e usar.", acao: "Ver modelos" },
   diagnostico: { titulo: "Veja como está a saúde do seu negócio.", acao: "Fazer o diagnóstico" },
   blog: { titulo: "Impostos e gestão explicados sem complicação.", acao: "Ler o blog" },
   glossario: { titulo: "Entenda cada sigla da sua contabilidade.", acao: "Abrir o glossário" },
@@ -100,43 +99,6 @@ function JanelaCalculadora() {
             <div className={cx(s.barra, s.anim, s.encher)} />
           </div>
         </div>
-      </div>
-    </Janela>
-  );
-}
-
-const arquivos = [
-  { nome: "Contrato de prestação de serviços", tipo: "DOCX" },
-  { nome: "Planilha de fluxo de caixa", tipo: "XLSX" },
-  { nome: "Modelo de recibo de pagamento", tipo: "PDF" },
-];
-
-function JanelaBiblioteca() {
-  return (
-    <Janela titulo="biblioteca" chips={["modelos"]}>
-      <div className={s.campo} style={{ position: "relative", overflow: "hidden" }}>
-        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-          <circle cx="11" cy="11" r="7" />
-          <path d="m20 20-3.5-3.5" />
-        </svg>
-        <Digitado texto="contrato" classe={s.digitar1} />
-        <span className={cx(s.progresso, s.anim)} />
-      </div>
-      <div style={{ marginTop: 10 }}>
-        {arquivos.map((a, i) => (
-          <div
-            key={a.nome}
-            className={cx(s.linha, s.anim, s[`linha${i}`], i === 0 && s.selecionar)}
-          >
-            <span style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
-              <span className={cx(s.selo, s.seloArquivo)}>{a.tipo}</span>
-              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                {a.nome}
-              </span>
-            </span>
-            {i === 0 && <span className={cx(s.botaoMini, s.anim, s.pressionar)}>Baixar</span>}
-          </div>
-        ))}
       </div>
     </Janela>
   );
@@ -263,7 +225,6 @@ function JanelaGlossario() {
 
 const janelas: Record<string, { Componente: () => ReactNode; ciclo: string }> = {
   calculadoras: { Componente: JanelaCalculadora, ciclo: "7s" },
-  biblioteca: { Componente: JanelaBiblioteca, ciclo: "7s" },
   diagnostico: { Componente: JanelaDiagnostico, ciclo: "8s" },
   blog: { Componente: JanelaBlog, ciclo: "7s" },
   glossario: { Componente: JanelaGlossario, ciclo: "10.5s" },
