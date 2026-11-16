@@ -52,28 +52,6 @@ export default function Footer() {
 
   return (
     <footer className="bg-azul text-white">
-      {/* Chamada final */}
-      <div className="border-b border-white/10 px-6 py-16 md:py-20">
-        <div className="mx-auto flex max-w-6xl flex-col items-start gap-8 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-2xl">
-            <p className="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-dourado">Contato</p>
-            <h2 className="mt-3 font-display text-4xl leading-[1.1] text-balance md:text-5xl">
-              Vamos conversar sobre a sua empresa?
-            </h2>
-            <p className="mt-4 font-sans text-base leading-relaxed text-white/70">
-              Conte o momento do seu negócio e a gente mostra o caminho, do registro ao planejamento.
-            </p>
-          </div>
-          <a
-            {...propsWhatsApp("Olá! Vim pelo site e quero conversar sobre a minha empresa.")}
-            className="inline-flex min-h-12 shrink-0 items-center gap-2 rounded-full bg-dourado px-7 py-3 font-sans text-sm font-semibold text-azul transition-colors hover:bg-[#dcb888] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado focus-visible:ring-offset-4 focus-visible:ring-offset-azul"
-          >
-            {temWhatsApp ? "Chamar no WhatsApp" : "Ver formas de contato"}
-            <span aria-hidden="true">→</span>
-          </a>
-        </div>
-      </div>
-
       {/* Colunas */}
       <div className="px-6 py-14 md:py-16">
         <div className="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr] lg:gap-10">
