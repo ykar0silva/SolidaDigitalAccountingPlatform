@@ -10,7 +10,7 @@ import { useCarrosselInfinito } from "@/lib/useCarrosselInfinito";
    - Desliza sozinha, como as avaliações: dá para segurar, arrastar e
      arremessar (o movimento fica em lib/useCarrosselInfinito.ts).
    - A foto que passa pelo ponto de destaque fica nítida e maior; as
-     próximas aparecem menores e apagadas, e as que passaram somem.
+     outras, dos dois lados, aparecem menores e apagadas.
    - O fundo da seção é a foto em destaque, desfocada.
    - Setas, bolinhas e teclado (← →) levam a uma foto; clicar numa
      foto apagada também.
@@ -70,9 +70,10 @@ export default function Escritorio() {
     let melhor = -1;
     let menor = Infinity;
     for (const c of cardsRef.current) {
-      const t = (x + c.pos) / passo; // 0 = no destaque; >0 à direita; <0 já passou
+      const t = (x + c.pos) / passo; // 0 = no destaque; >0 à direita; <0 à esquerda
       const d = Math.min(Math.abs(t), 1);
-      const opacidade = t < 0 ? Math.max(0, 1 + t * 1.4) : 1 - d * 0.55;
+      // Mesmo efeito dos dois lados: menores e apagadas, sem sumir
+      const opacidade = 1 - d * 0.55;
       const escala = 1 - d * 0.08;
       c.el.style.opacity = opacidade.toFixed(3);
       c.el.style.transform = `scale(${escala.toFixed(4)})`;
@@ -224,7 +225,7 @@ export default function Escritorio() {
         </div>
 
         {/* Legenda + bolinhas + pausa */}
-        <div className="mt-6 px-6 md:-mt-16 md:px-16">
+        <div className="mt-6 px-6 md:px-16">
           <p className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-[#8C6239]">{atual.legenda}</p>
           <div className="mt-4 flex items-center gap-1">
             {slides.map((s, i) => (
