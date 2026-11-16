@@ -1,26 +1,34 @@
+import Image from "next/image";
 import { servicos, type Servico } from "@/data/servicos";
 import { propsWhatsApp } from "@/data/contato";
 
 // Serviços agrupados pelo momento da empresa. Os nomes precisam bater
 // com os títulos em data/servicos.ts; o que não estiver em nenhum grupo
 // entra no último, para nada sumir do site.
-const fases = [
+// foto: imagem do topo do card (em public/images/servicos/); null = card sem foto.
+const fases: { nome: string; chamada: string; acao: string; foto: string | null; fotoAlt: string; servicos: string[] }[] = [
   {
     nome: "Abrir",
     chamada: "Para tirar a empresa do papel ou mudar a estrutura dela.",
     acao: "Quero abrir minha empresa",
+    foto: "/images/servicos/abrir.webp",
+    fotoAlt: "Mão assinando um contrato com caneta dourada",
     servicos: ["Legalização e Paralegal", "Estruturação de Holdings"],
   },
   {
     nome: "Manter em dia",
     chamada: "Para a rotina fiscal, contábil e da folha andar sem atraso.",
     acao: "Quero a rotina em dia",
+    foto: null,
+    fotoAlt: "",
     servicos: ["Escrituração Fiscal", "Escrituração Contábil", "Gestão de Pessoal"],
   },
   {
     nome: "Crescer",
     chamada: "Para decidir com números e se preparar para o que muda.",
     acao: "Quero planejar o crescimento",
+    foto: null,
+    fotoAlt: "",
     servicos: [
       "Assessoria Contábil e Tributária",
       "Planejamento Tributário",
@@ -89,52 +97,63 @@ export default function Servicos() {
                 </span>
               </div>
 
-              <div className="mt-5 flex flex-1 flex-col rounded-3xl border border-azul/10 bg-white p-7 shadow-md shadow-azul/5 md:p-8">
-                <h3 className="font-display text-3xl text-azul md:text-4xl">{fase.nome}</h3>
-                <p className="mt-3 font-sans text-sm leading-relaxed text-azul/65 md:text-base">
-                  {fase.chamada}
-                </p>
+              <div className="mt-5 flex flex-1 flex-col overflow-hidden rounded-3xl border border-azul/10 bg-white shadow-md shadow-azul/5">
+                {fase.foto && (
+                  <div className="relative aspect-[16/9]">
+                    <Image
+                      src={fase.foto}
+                      alt={fase.fotoAlt}
+                      fill
+                      sizes="(min-width: 1024px) 370px, (min-width: 768px) 700px, 100vw"
+                      className="object-cover"
+                    />
+                  </div>
+                )}
+                <div className="flex flex-1 flex-col p-7 md:p-8">
+                  <h3 className="font-display text-3xl text-azul md:text-4xl">{fase.nome}</h3>
+                  <p className="mt-3 font-sans text-sm leading-relaxed text-azul/65 md:text-base">
+                    {fase.chamada}
+                  </p>
 
-                <ul className="mt-6 flex flex-col border-t border-azul/10">
-                  {fase.itens.map((servico) => (
-                    <li key={servico.titulo} className="border-b border-azul/10 last:border-b-0">
-                      <a
-                        {...propsWhatsApp(`Olá! Quero saber mais sobre ${servico.titulo}.`)}
-                        className="group -mx-3 flex items-start gap-4 rounded-xl px-3 py-4 transition-colors hover:bg-creme focus-visible:bg-creme focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C6239]"
-                      >
-                        <span className="min-w-0 flex-1">
-                          <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                            <span className="font-sans text-base font-semibold text-azul">
-                              {servico.titulo}
-                            </span>
-                            {servico.destaque && (
-                              <span className="rounded-full bg-dourado px-2 py-0.5 font-sans text-[10px] font-bold uppercase tracking-wider text-azul">
-                                Tema atual
+                  <ul className="mt-6 flex flex-col border-t border-azul/10">
+                    {fase.itens.map((servico) => (
+                      <li key={servico.titulo} className="border-b border-azul/10 last:border-b-0">
+                        <a
+                          {...propsWhatsApp(`Olá! Quero saber mais sobre ${servico.titulo}.`)}
+                          className="group -mx-3 flex items-start gap-4 rounded-xl px-3 py-4 transition-colors hover:bg-creme focus-visible:bg-creme focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C6239]"
+                        >
+                          <span className="min-w-0 flex-1">
+                            <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                              <span className="font-sans text-base font-semibold text-azul">
+                                {servico.titulo}
                               </span>
-                            )}
+                              {servico.destaque && (
+                                <span className="rounded-full bg-dourado px-2 py-0.5 font-sans text-[10px] font-bold uppercase tracking-wider text-azul">
+                                  Tema atual
+                                </span>
+                              )}
+                            </span>
+                            <span className="mt-1 block font-sans text-sm leading-relaxed text-azul/60">
+                              {servico.descricao}
+                            </span>
                           </span>
-                          <span className="mt-1 block font-sans text-sm leading-relaxed text-azul/60">
-                            {servico.descricao}
+                          <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-azul/15 text-azul transition-colors duration-300 group-hover:border-dourado group-hover:bg-dourado">
+                            <Seta className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                           </span>
-                        </span>
-                        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-azul/15 text-azul transition-colors duration-300 group-hover:border-dourado group-hover:bg-dourado">
-                          <Seta className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-                        </span>
-                        
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
 
-                <div className="mt-auto pt-6">
-                  <a
-                    {...propsWhatsApp(`Olá! ${fase.acao}. Podemos conversar?`)}
-                    className="flex min-h-12 items-center justify-center gap-2 rounded-full border border-azul/20 px-5 font-sans text-sm font-semibold text-azul transition-colors hover:border-azul hover:bg-azul hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C6239]"
-                  >
-                    {fase.acao}
-                    <Seta className="h-4 w-4" />
-                    
-                  </a>
+                  <div className="mt-auto pt-6">
+                    <a
+                      {...propsWhatsApp(`Olá! ${fase.acao}. Podemos conversar?`)}
+                      className="flex min-h-12 items-center justify-center gap-2 rounded-full border border-azul/20 px-5 font-sans text-sm font-semibold text-azul transition-colors hover:border-azul hover:bg-azul hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C6239]"
+                    >
+                      {fase.acao}
+                      <Seta className="h-4 w-4" />
+                    </a>
+                  </div>
                 </div>
               </div>
             </li>
