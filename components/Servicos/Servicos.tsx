@@ -27,8 +27,8 @@ const fases: { nome: string; chamada: string; acao: string; foto: string | null;
     nome: "Crescer",
     chamada: "Para decidir com números e se preparar para o que muda.",
     acao: "Quero planejar o crescimento",
-    foto: null,
-    fotoAlt: "",
+    foto: "/images/servicos/crescer.webp",
+    fotoAlt: "Dedo apontando um painel de gráficos financeiros em um tablet",
     servicos: [
       "Assessoria Contábil e Tributária",
       "Planejamento Tributário",
