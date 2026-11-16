@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
-import { contato, enderecoCompleto, formatarWhatsApp, propsWhatsApp } from "@/data/contato";
+import {
+  contato,
+  enderecoCompleto,
+  formatarWhatsApp,
+  linkTelefone,
+  propsWhatsApp,
+  whatsappEhTelefone,
+} from "@/data/contato";
 
 export const metadata: Metadata = {
   title: "Contato | Sólida Assessoria Contábil",
@@ -9,7 +16,7 @@ export const metadata: Metadata = {
 type Canal = { rotulo: string; valor: string; href?: string; externo?: boolean; acao?: string };
 
 export default function Page() {
-  const { rua, bairro } = contato.endereco;
+  const { rua } = contato.endereco;
   const endereco = enderecoCompleto();
 
   const canais: Canal[] = [];
@@ -17,18 +24,21 @@ export default function Page() {
     const p = propsWhatsApp("Olá! Vim pelo site e quero falar com a Sólida.");
     canais.push({ rotulo: "WhatsApp", valor: formatarWhatsApp(contato.whatsapp), href: p.href, externo: true, acao: "Chamar no WhatsApp" });
   }
-  if (contato.telefone) {
-    canais.push({ rotulo: "Telefone", valor: contato.telefone, href: `tel:${contato.telefone.replace(/\D/g, "")}`, acao: "Ligar" });
+  if (contato.telefone && whatsappEhTelefone) {
+    // Mesmo número do WhatsApp: um cartão para ligar logo abaixo
+    canais.push({ rotulo: "Telefone", valor: contato.telefone, href: linkTelefone(contato.telefone), acao: "Ligar" });
+  }
+  if (contato.telefone && !whatsappEhTelefone) {
+    canais.push({ rotulo: "Telefone", valor: contato.telefone, href: linkTelefone(contato.telefone), acao: "Ligar" });
   }
   if (contato.email) {
     canais.push({ rotulo: "E-mail", valor: contato.email, href: `mailto:${contato.email}`, acao: "Enviar e-mail" });
   }
 
-  const mapa = rua
-    ? `https://www.google.com/maps?q=${encodeURIComponent(endereco)}&output=embed`
-    : null;
-  const rota = rua
-    ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(endereco)}`
+  const busca = contato.mapaBusca ?? (rua ? endereco : null);
+  const mapa = busca ? `https://www.google.com/maps?q=${encodeURIComponent(busca)}&output=embed` : null;
+  const rota = busca
+    ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(busca)}`
     : null;
 
   return (
@@ -74,7 +84,9 @@ export default function Page() {
             <div className="rounded-2xl border border-azul/10 bg-white p-6 shadow-sm shadow-azul/5 md:p-7">
               <p className="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-[#8C6239]">Endereço</p>
               <p className="mt-2 font-sans text-lg font-semibold text-azul md:text-xl">{endereco}</p>
-              {bairro && !rua && <p className="mt-1 font-sans text-sm text-azul/60">{bairro}</p>}
+              {contato.endereco.cep && (
+                <p className="mt-1 font-sans text-sm tabular-nums text-azul/60">CEP {contato.endereco.cep}</p>
+              )}
               {rota && (
                 <a
                   href={rota}

@@ -17,8 +17,9 @@ export const avaliacoes: Avaliacao[] = [
 // Preencha com os números reais do Google. Enquanto for null, a linha de nota não aparece.
 export const resumo: { nota: number | null; total: number | null } = {
   nota: 5.0,
-  total: null,
+  total: 23,
 };
 
 // Link para o cliente deixar avaliação (perfil da Sólida no Google).
-export const linkAvaliar = "https://g.page/r/COLE_AQUI/review";
+// Perfil da Sólida no Google Maps (lá fica o botão de avaliar).
+export const linkAvaliar = "https://www.google.com/maps?cid=12368661335113497994";

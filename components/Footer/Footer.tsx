@@ -4,8 +4,10 @@ import {
   contato,
   enderecoCompleto,
   formatarWhatsApp,
+  linkTelefone,
   propsWhatsApp,
   temWhatsApp,
+  whatsappEhTelefone,
 } from "@/data/contato";
 
 const navegacao = [
@@ -130,13 +132,13 @@ export default function Footer() {
               {contato.whatsapp && (
                 <li>
                   <a {...propsWhatsApp("Olá! Vim pelo site.")} className={linkClasse}>
-                    WhatsApp {formatarWhatsApp(contato.whatsapp)}
+                    {whatsappEhTelefone ? "Telefone e WhatsApp" : "WhatsApp"} {formatarWhatsApp(contato.whatsapp)}
                   </a>
                 </li>
               )}
-              {contato.telefone && (
+              {contato.telefone && !whatsappEhTelefone && (
                 <li>
-                  <a href={`tel:${contato.telefone.replace(/\D/g, "")}`} className={linkClasse}>
+                  <a href={linkTelefone(contato.telefone)} className={linkClasse}>
                     {contato.telefone}
                   </a>
                 </li>
