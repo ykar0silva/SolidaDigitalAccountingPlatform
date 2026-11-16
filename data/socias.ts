@@ -4,6 +4,8 @@ export type Socia = {
   role: string;
   descricao: string;
   qualificacoes: string[];
+  // Foto individual para a página /sobre (em public/images/socias/). null = moldura no lugar.
+  foto: string | null;
 };
 
 // A ordem importa: a primeira fica à esquerda da foto, a segunda à direita.
@@ -14,6 +16,7 @@ export const socias: Socia[] = [
     role: "Sócia-fundadora",
     descricao:
       "Com visão estratégica e dedicação, transforma desafios contábeis em oportunidades de crescimento para os clientes.",
+    foto: null,
     qualificacoes: [
       "Graduada em Ciências Contábeis",
       "Graduada em Direito",
@@ -29,6 +32,7 @@ export const socias: Socia[] = [
     role: "Sócia-fundadora",
     descricao:
       "Alia conhecimento técnico e sensibilidade para oferecer um atendimento próximo e humanizado.",
+    foto: null,
     qualificacoes: [
       "Graduada em Ciências Contábeis",
       "Pós-graduação em Gerência Contábil, Auditoria e Controladoria",

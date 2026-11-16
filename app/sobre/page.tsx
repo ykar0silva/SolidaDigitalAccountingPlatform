@@ -9,6 +9,20 @@ export const metadata: Metadata = {
     "Conheça a história da Sólida Assessoria Contábil, fundada em 2008 em Palmas-TO pelas irmãs Cleia e Núbia Fernandes.",
 };
 
+// Moldura no lugar de uma foto que ainda não chegou
+function SemFoto({ rotulo }: { rotulo: string }) {
+  return (
+    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-white/[0.04] text-center">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true" className="h-10 w-10 text-dourado/50">
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <circle cx="9" cy="10" r="2" />
+        <path d="m21 16-5-5-8 8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      <p className="font-sans text-xs uppercase tracking-[0.2em] text-white/40">{rotulo}</p>
+    </div>
+  );
+}
+
 // Página Sobre: história, sócias, equipe, missão e valores.
 export default function Page() {
   return (
@@ -38,60 +52,68 @@ export default function Page() {
           {socias.map((socia) => (
             <article
               key={socia.slug}
-              className="flex flex-col rounded-2xl border border-dourado/20 bg-white/[0.04] p-6 md:p-8"
+              className="flex flex-col overflow-hidden rounded-2xl border border-dourado/20 bg-white/[0.04]"
             >
-              <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-dourado">
-                {socia.role}
-              </p>
-              <h3 className="mt-2 font-display text-2xl text-white md:text-3xl">{socia.name}</h3>
-              <p className="mt-3 font-sans text-sm leading-relaxed text-white/80 md:min-h-[4.5rem] md:text-base">
-                {socia.descricao}
-              </p>
+              <div className="relative aspect-[5/4] border-b border-dourado/20">
+                {socia.foto ? (
+                  <Image
+                    src={socia.foto}
+                    alt={socia.name}
+                    fill
+                    sizes="(min-width: 1024px) 500px, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover object-top"
+                  />
+                ) : (
+                  <SemFoto rotulo={`Foto de ${socia.name.split(" ")[0]}`} />
+                )}
+              </div>
 
-              <div className="mt-5 border-t border-dourado/20 pt-5">
-                <p className="mb-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50">
-                  Formação e atuação
+              <div className="flex flex-1 flex-col p-6 md:p-8">
+                <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-dourado">
+                  {socia.role}
                 </p>
-                <ul className="space-y-2.5">
-                  {socia.qualificacoes.map((q) => (
-                    <li key={q} className="flex gap-3 font-sans text-sm leading-snug text-white/85">
-                      <span aria-hidden="true" className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-dourado" />
-                      {q}
-                    </li>
-                  ))}
-                </ul>
+                <h3 className="mt-2 font-display text-2xl text-white md:text-3xl">{socia.name}</h3>
+                <p className="mt-3 font-sans text-sm leading-relaxed text-white/80 md:min-h-[4.5rem] md:text-base">
+                  {socia.descricao}
+                </p>
+
+                <div className="mt-5 border-t border-dourado/20 pt-5">
+                  <p className="mb-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50">
+                    Formação e atuação
+                  </p>
+                  <ul className="space-y-2.5">
+                    {socia.qualificacoes.map((q) => (
+                      <li key={q} className="flex gap-3 font-sans text-sm leading-snug text-white/85">
+                        <span aria-hidden="true" className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-dourado" />
+                        {q}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </article>
           ))}
         </div>
       </section>
 
-      {/* Equipe */}
-      <section aria-labelledby="equipe-titulo" className="border-t border-dourado/15 px-6 py-16 md:py-24">
-        <div className="mx-auto grid max-w-5xl items-center gap-10 md:grid-cols-[1.1fr_1fr] md:gap-14">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-dourado/20 bg-white/[0.04]">
-            {equipe.foto ? (
-              <Image
-                src={equipe.foto}
-                alt={equipe.fotoAlt}
-                fill
-                sizes="(min-width: 1024px) 540px, 100vw"
-                className="object-cover"
-              />
-            ) : (
-              // Sem foto ainda: moldura neutra no lugar
-              <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true" className="h-10 w-10 text-dourado/50">
-                  <rect x="3" y="5" width="18" height="14" rx="2" />
-                  <circle cx="9" cy="10" r="2" />
-                  <path d="m21 16-5-5-8 8" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <p className="font-sans text-xs uppercase tracking-[0.2em] text-white/40">Foto da equipe</p>
-              </div>
-            )}
-          </div>
+      {/* Equipe: metade foto (até a borda da tela), metade texto */}
+      <section aria-labelledby="equipe-titulo" className="grid border-t border-dourado/15 md:grid-cols-2">
+        <div className="relative min-h-[300px] sm:min-h-[420px] md:min-h-[600px]">
+          {equipe.foto ? (
+            <Image
+              src={equipe.foto}
+              alt={equipe.fotoAlt}
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-cover"
+            />
+          ) : (
+            <SemFoto rotulo="Foto da equipe" />
+          )}
+        </div>
 
-          <div>
+        <div className="flex items-center px-6 py-16 md:px-12 md:py-24 lg:px-20">
+          <div className="max-w-xl">
             <p className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-dourado">
               Nossa equipe
             </p>
