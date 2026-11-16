@@ -61,7 +61,7 @@ export default function Servicos() {
   const grupos = montarFases();
 
   return (
-    <section id="servicos" className="bg-creme px-6 py-24 md:py-32" aria-labelledby="servicos-titulo">
+    <section id="servicos" className="bg-creme px-6 pb-16 pt-24 md:pb-20 md:pt-32" aria-labelledby="servicos-titulo">
       <div className="mx-auto max-w-6xl">
         {/* Cabeçalho */}
         <div className="mx-auto max-w-3xl text-center">

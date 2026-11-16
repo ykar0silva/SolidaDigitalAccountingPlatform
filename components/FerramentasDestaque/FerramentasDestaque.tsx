@@ -277,7 +277,7 @@ export default function FerramentasDestaque() {
   return (
     <section
       id="ferramentas"
-      className={cx(s.secao, "bg-creme px-4 py-24 md:px-6 md:py-32")}
+      className={cx(s.secao, "bg-creme px-4 pb-24 pt-16 md:px-6 md:pb-32 md:pt-20")}
       aria-labelledby="ferramentas-titulo"
     >
       <div className="mx-auto max-w-[1080px]">
