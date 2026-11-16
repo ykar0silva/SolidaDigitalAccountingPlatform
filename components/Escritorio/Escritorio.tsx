@@ -11,7 +11,7 @@ import { useCarrosselInfinito } from "@/lib/useCarrosselInfinito";
      arremessar (o movimento fica em lib/useCarrosselInfinito.ts).
    - A foto que passa pelo ponto de destaque fica nítida e maior; as
      outras, dos dois lados, aparecem menores e apagadas.
-   - O fundo da seção é a foto em destaque, desfocada.
+   - O fundo da seção é a fachada do escritório, desfocada e clareada.
    - Setas, bolinhas e teclado (← →) levam a uma foto; clicar numa
      foto apagada também.
 ------------------------------------------------------------------- */
@@ -26,7 +26,8 @@ const EXEMPLOS: Slide[] = ["Recepção", "Sala de reunião", "Atendimento", "Equ
 }));
 
 const MOSTRAR_EXEMPLOS = process.env.NODE_ENV === "development";
-const COPIAS = 4; // repetições da lista para nunca faltar foto na tela
+const COPIAS = 4;
+const FUNDO = "/images/escritorio/fachada.webp"; // foto de fundo da seção // repetições da lista para nunca faltar foto na tela
 
 function Seta({ direcao }: { direcao: "esq" | "dir" }) {
   return (
@@ -36,19 +37,15 @@ function Seta({ direcao }: { direcao: "esq" | "dir" }) {
   );
 }
 
-function Moldura({ legenda, fundo = false }: { legenda: string; fundo?: boolean }) {
+function Moldura({ legenda }: { legenda: string }) {
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-[#E9DFCF] via-[#DCC9AC] to-[#C9AE86]">
-      {!fundo && (
-        <>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true" className="h-9 w-9 text-azul/40">
-            <rect x="3" y="5" width="18" height="14" rx="2" />
-            <circle cx="9" cy="10" r="2" />
-            <path d="m21 16-5-5-8 8" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <span className="font-sans text-xs uppercase tracking-[0.2em] text-azul/50">{legenda}</span>
-        </>
-      )}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true" className="h-9 w-9 text-azul/40">
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <circle cx="9" cy="10" r="2" />
+        <path d="m21 16-5-5-8 8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      <span className="font-sans text-xs uppercase tracking-[0.2em] text-azul/50">{legenda}</span>
     </div>
   );
 }
@@ -129,20 +126,17 @@ export default function Escritorio() {
 
   return (
     <section id="escritorio" aria-labelledby="escritorio-titulo" className="relative overflow-hidden bg-creme py-16 md:py-20">
-      {/* Fundo: foto em destaque desfocada, com véu creme por cima */}
+      {/* Fundo: fachada do escritório desfocada, com véu creme por cima */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        {slides.map((s, i) => (
-          <div
-            key={`fundo-${i}`}
-            className={`absolute inset-0 scale-110 blur-2xl transition-opacity duration-1000 motion-reduce:transition-none ${
-              i === ativo ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            {s.src ? <Image src={s.src} alt="" fill sizes="640px" className="object-cover" /> : <Moldura legenda="" fundo />}
-          </div>
-        ))}
-        <div className="absolute inset-0 bg-creme/75" />
-        <div className="absolute inset-0 bg-gradient-to-r from-creme via-creme/40 to-transparent md:via-creme/20" />
+        <Image
+          src={FUNDO}
+          alt=""
+          fill
+          sizes="100vw"
+          className="scale-105 object-cover object-center blur-[6px]"
+        />
+        <div className="absolute inset-0 bg-creme/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-creme/90 via-creme/30 to-creme/10" />
       </div>
 
       <div className="relative">
