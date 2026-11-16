@@ -31,7 +31,7 @@ export const ferramentasDestaque: FerramentaDestaque[] = [
   {
     slug: "blog",
     title: "Blog",
-    description: "Análises sobre tributação, gestão e finanças para pequenas empresas.",
+    description: "Análises sobre tributação, gestão e finanças para empresas.",
     images: ["/images/ferramentas/blog-1.jpg", "/images/ferramentas/blog-2.jpg"],
     href: "/blog",
   },

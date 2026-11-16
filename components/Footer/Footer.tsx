@@ -88,7 +88,7 @@ export default function Footer() {
               />
             </Link>
             <p className="mt-4 max-w-xs font-sans text-sm leading-relaxed text-white/60">
-              Contabilidade para pequenas empresas e MEIs em {contato.endereco.cidade}-{contato.endereco.uf}, desde 2008.
+              Contabilidade para empresas e MEIs em {contato.endereco.cidade}-{contato.endereco.uf}, desde 2008.
             </p>
             {redes.length > 0 && (
               <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 font-sans text-sm">

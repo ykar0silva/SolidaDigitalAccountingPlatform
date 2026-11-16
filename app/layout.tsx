@@ -8,7 +8,7 @@ import WhatsAppChat from "@/components/WhatsAppChat/WhatsAppChat";
 
 export const metadata: Metadata = {
   title: "Sólida Assessoria Contábil",
-  description: "Contabilidade para pequenas empresas e MEIs em Palmas-TO.",
+  description: "Contabilidade para empresas e MEIs em Palmas-TO.",
 };
 
 export const viewport: Viewport = {
