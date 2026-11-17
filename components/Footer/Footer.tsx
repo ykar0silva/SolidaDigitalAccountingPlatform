@@ -18,6 +18,33 @@ const fases = [
   { label: "Reforma Tributária", href: "/#servicos" },
 ];
 
+// Ícones das redes (traço simples, herdam a cor do texto)
+const icones: Record<string, React.ReactNode> = {
+  Instagram: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" className="h-5 w-5">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4.2" />
+      <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none" />
+    </svg>
+  ),
+  LinkedIn: (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="h-5 w-5">
+      <path d="M6.94 8.5H3.56V20h3.38V8.5ZM5.25 3A1.97 1.97 0 1 0 5.25 7a1.97 1.97 0 0 0 0-3.94ZM20.44 13.4c0-3.08-1.64-4.52-3.84-4.52-1.77 0-2.56.98-3 1.66V8.5h-3.38V20h3.38v-6.06c0-1.6.3-3.14 2.28-3.14 1.95 0 1.98 1.82 1.98 3.24V20h3.38l.02-6.6Z" />
+    </svg>
+  ),
+  Facebook: (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="h-5 w-5">
+      <path d="M13.5 21v-7.5h2.53l.38-2.94H13.5V8.69c0-.85.24-1.43 1.46-1.43h1.56V4.64c-.27-.04-1.2-.12-2.27-.12-2.25 0-3.79 1.37-3.79 3.89v2.17H7.92v2.94h2.54V21h3.04Z" />
+    </svg>
+  ),
+};
+
+// Texto do botão: o @ quando dá para tirar do endereço
+const rotuloRede = (nome: string, url: string) => {
+  const usuario = url.match(/instagram\.com\/([^/?#]+)/)?.[1];
+  return usuario ? `@${usuario}` : nome;
+};
+
 const redes = [
   { nome: "Instagram", url: contato.redes.instagram },
   { nome: "LinkedIn", url: contato.redes.linkedin },
@@ -61,11 +88,18 @@ export default function Footer() {
               Contabilidade para empresas e MEIs em {contato.endereco.cidade}-{contato.endereco.uf}, desde 2008.
             </p>
             {redes.length > 0 && (
-              <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 font-sans text-sm">
+              <ul className="mt-6 flex flex-wrap gap-3 font-sans text-sm">
                 {redes.map((r) => (
                   <li key={r.nome}>
-                    <a href={r.url} target="_blank" rel="noopener noreferrer" className={linkClasse}>
-                      {r.nome}
+                    <a
+                      href={r.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${r.nome} da Sólida: ${rotuloRede(r.nome, r.url)}`}
+                      className="inline-flex min-h-11 items-center gap-2.5 rounded-full border border-dourado/40 bg-white/5 px-4 font-semibold text-white transition-colors hover:border-dourado hover:bg-dourado hover:text-azul focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado"
+                    >
+                      <span className="text-dourado transition-colors [a:hover_&]:text-azul">{icones[r.nome]}</span>
+                      {rotuloRede(r.nome, r.url)}
                     </a>
                   </li>
                 ))}

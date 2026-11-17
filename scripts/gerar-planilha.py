@@ -34,8 +34,8 @@ fina = Side(style="thin", color="E5DED2")
 borda = Border(left=fina, right=fina, top=fina, bottom=fina)
 
 
-def f(size=10, bold=False, color="1F2937", italic=False):
-    return Font(name=FONTE, size=size, bold=bold, color=color, italic=italic)
+def f(size=10, bold=False, color="1F2937", italic=False, underline=False):
+    return Font(name=FONTE, size=size, bold=bold, color=color, italic=italic, underline="single" if underline else None)
 
 
 def faixa_titulo(ws, titulo, subtitulo, ate_col):
@@ -121,9 +121,12 @@ ins.cell(r + 5, 3, "A aba Lançamentos já vem com algumas linhas de exemplo. Ap
 ins.cell(r + 7, 2, "Sólida Assessoria Contábil").font = f(11, True, AZUL)
 ins.cell(r + 8, 2, "Contabilidade para empresas e MEIs em Palmas-TO, desde 2008.").font = f(10, color=CINZA)
 ins.cell(r + 9, 2, "WhatsApp: (63) 3213-3522").font = f(10, color=CINZA)
-site = ins.cell(r + 10, 2, "site-solida.vercel.app")
-site.hyperlink = "https://site-solida.vercel.app"
-site.font = f(10, color=DOURADO_ESC)
+site = ins.cell(r + 10, 2, "www.solidacontabil.com.br")
+site.hyperlink = "https://www.solidacontabil.com.br/"
+site.font = f(10, color=DOURADO_ESC, underline=True)
+insta = ins.cell(r + 11, 2, "Instagram: @solida.contabilidadeto")
+insta.hyperlink = "https://www.instagram.com/solida.contabilidadeto/"
+insta.font = f(10, color=DOURADO_ESC, underline=True)
 
 # ------------------------------------------------------------------ Categorias
 cat = wb.create_sheet("Categorias")
