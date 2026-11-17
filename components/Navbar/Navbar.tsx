@@ -3,15 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
-const menuItems = [
-  { label: "Início", href: "/" },
-  { label: "Sobre", href: "/sobre" },
-  { label: "Serviços", href: "/servicos" },
-  { label: "Blog", href: "/blog" },
-  { label: "Ferramentas", href: "/ferramentas" },
-  { label: "Contato", href: "/contato" },
-];
+import { navegacao as menuItems } from "@/data/navegacao";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);

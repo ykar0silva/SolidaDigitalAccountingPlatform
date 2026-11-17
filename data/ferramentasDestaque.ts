@@ -15,13 +15,6 @@ export const ferramentasDestaque: FerramentaDestaque[] = [
     href: "/ferramentas",
   },
   {
-    slug: "biblioteca",
-    title: "Biblioteca de Arquivos",
-    description: "Modelos de contratos, planilhas e documentos prontos para baixar.",
-    images: ["/images/ferramentas/biblioteca-1.jpg", "/images/ferramentas/biblioteca-2.jpg"],
-    href: "/biblioteca",
-  },
-  {
     slug: "diagnostico",
     title: "Diagnóstico Empresarial",
     description: "Um questionário rápido revela a saúde financeira do seu negócio.",

@@ -1,9 +1,6 @@
-"use client";
-
-import { useCallback, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { socias } from "@/data/socias";
-import SociasModal from "@/components/SociasModal/SociasModal";
 
 // Foto das duas (dentro de public/)
 const FOTO_JUNTAS = "/images/socias/socias-juntas.webp";
@@ -20,12 +17,10 @@ const MASCARA_BASE =
   "linear-gradient(to bottom, #000 0%, #000 68%, rgba(0,0,0,0.6) 82%, rgba(0,0,0,0.2) 93%, transparent 100%)";
 
 export default function Socias() {
-  const [aberta, setAberta] = useState(false);
-  const fechar = useCallback(() => setAberta(false), []);
   const [esquerda, direita] = socias;
 
   return (
-    <section className="relative overflow-hidden bg-azul px-6 pb-20 pt-16 md:pb-28 md:pt-20">
+    <section id="socias" aria-labelledby="socias-titulo" className="relative overflow-hidden bg-azul px-6 pb-20 pt-16 md:pb-28 md:pt-20">
       {/* Fundo: leve clareado no centro */}
       <div
         className="pointer-events-none absolute inset-0"
@@ -54,11 +49,7 @@ export default function Socias() {
         {/* Celular e tablet: foto → título → botão → sócias. Desktop (≥1024px): sócias dos lados da foto, título embaixo. */}
         <div className="mx-auto flex w-full max-w-7xl flex-col lg:grid lg:grid-cols-[1fr_minmax(0,34rem)_1fr] xl:grid-cols-[1fr_minmax(0,48rem)_1fr] lg:items-center">
           {/* Foto das duas */}
-          <button
-            onClick={() => setAberta(true)}
-            className="group relative block h-[360px] w-full md:h-[620px] rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado focus-visible:ring-offset-4 focus-visible:ring-offset-azul order-1 lg:order-none lg:col-start-2 lg:row-start-1 lg:h-[740px]"
-            aria-label="Conhecer a história das sócias"
-          >
+          <div className="relative h-[360px] w-full md:h-[620px] order-1 lg:order-none lg:col-start-2 lg:row-start-1 lg:h-[740px]">
             <div
               className="pointer-events-none absolute inset-0"
               style={{
@@ -73,13 +64,13 @@ export default function Socias() {
               fill
               sizes="(min-width: 1024px) 768px, 100vw"
               style={{ maskImage: MASCARA_BASE, WebkitMaskImage: MASCARA_BASE }}
-              className="origin-bottom object-cover object-bottom transition-transform duration-700 group-hover:scale-[1.03] md:scale-[1.15] md:object-contain md:group-hover:scale-[1.19] lg:scale-[1.3] lg:group-hover:scale-[1.34]"
+              className="origin-bottom object-cover object-bottom md:scale-[1.15] md:object-contain lg:scale-[1.3]"
             />
-          </button>
+          </div>
 
           {/* Sócia da esquerda */}
           {esquerda && (
-            <div className="order-3 mt-12 text-center lg:order-none lg:col-start-1 lg:row-start-1 lg:mt-0 lg:justify-self-end lg:pr-4 lg:text-right">
+            <div className="hidden lg:block lg:order-none lg:col-start-1 lg:row-start-1 lg:mt-0 lg:justify-self-end lg:pr-4 lg:text-right">
               <div className="mx-auto mb-4 h-px w-12 bg-dourado lg:ml-auto lg:mr-0" />
               <p className="font-display text-2xl text-white md:text-3xl">
                 {esquerda.name}
@@ -93,7 +84,7 @@ export default function Socias() {
 
           {/* Sócia da direita */}
           {direita && (
-            <div className="order-4 mt-10 text-center lg:order-none lg:col-start-3 lg:row-start-1 lg:mt-0 lg:justify-self-start lg:pl-4 lg:text-left">
+            <div className="hidden lg:block lg:order-none lg:col-start-3 lg:row-start-1 lg:mt-0 lg:justify-self-start lg:pl-4 lg:text-left">
               <div className="mx-auto mb-4 h-px w-12 bg-dourado lg:mx-0" />
               <p className="font-display text-2xl text-white md:text-3xl">
                 {direita.name}
@@ -107,15 +98,19 @@ export default function Socias() {
 
           {/* Título no pé das duas + botão */}
           <div className="relative z-10 order-2 -mt-24 text-center lg:order-none lg:col-span-3 lg:row-start-2 lg:-mt-32">
-            <h2 className="pointer-events-none mx-auto max-w-4xl font-display text-3xl text-white md:text-5xl text-balance">
+            <h2 id="socias-titulo" className="pointer-events-none mx-auto max-w-4xl font-display text-3xl text-white md:text-5xl text-balance">
               Quem está à frente da Sólida
             </h2>
-            <button
-              onClick={() => setAberta(true)}
-              className="mt-6 rounded-full bg-dourado px-8 py-3 font-sans text-sm font-semibold text-azul transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado focus-visible:ring-offset-4 focus-visible:ring-offset-azul md:mt-8"
+            {/* No celular, os nomes ficam aqui (os textos laterais só aparecem no desktop) */}
+            <p className="mx-auto mt-3 max-w-xs font-sans text-sm text-dourado text-balance lg:hidden">
+              {socias.map((s) => s.name).join(" e ")}, sócias-fundadoras
+            </p>
+            <Link
+              href="/sobre"
+              className="mt-6 inline-block rounded-full bg-dourado px-8 py-3 font-sans text-sm font-semibold text-azul transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dourado focus-visible:ring-offset-4 focus-visible:ring-offset-azul md:mt-8"
             >
               Conhecer nossa história
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -129,8 +124,6 @@ export default function Socias() {
           ))}
         </ul>
       </div>
-
-      <SociasModal aberta={aberta} onClose={fechar} />
     </section>
   );
 }
