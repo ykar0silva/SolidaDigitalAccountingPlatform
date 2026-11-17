@@ -68,8 +68,8 @@ export default async function Page({ params }: PageProps<"/blog/[slug]">) {
           {post.capa && (
             <div aria-hidden="true" className="absolute inset-0">
               <Image src={post.capa} alt="" fill priority sizes="100vw" className="object-cover" />
-              <div className="absolute inset-0 bg-azul/75" />
-              <div className="absolute inset-0 bg-gradient-to-r from-azul via-azul/80 to-azul/30" />
+              <div className="absolute inset-0 bg-azul/55" />
+              <div className="absolute inset-0 bg-gradient-to-r from-azul/90 via-azul/55 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-azul/60 to-transparent" />
             </div>
           )}
