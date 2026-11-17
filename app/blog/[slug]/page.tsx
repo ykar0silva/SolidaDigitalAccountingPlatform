@@ -63,11 +63,21 @@ export default async function Page({ params }: PageProps<"/blog/[slug]">) {
       />
 
       <article>
-        <header className="bg-azul px-6 pb-14 pt-36 md:pb-16 md:pt-44">
-          <div className={`mx-auto ${post.capa ? "grid max-w-6xl items-center gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14" : "max-w-3xl"}`}>
-            <div>
+        <header className="relative overflow-hidden bg-azul px-6 pb-16 pt-36 md:pb-24 md:pt-48">
+          {/* Foto de fundo com véu azul por cima (mais forte do lado do texto) */}
+          {post.capa && (
+            <div aria-hidden="true" className="absolute inset-0">
+              <Image src={post.capa} alt="" fill priority sizes="100vw" className="object-cover" />
+              <div className="absolute inset-0 bg-azul/75" />
+              <div className="absolute inset-0 bg-gradient-to-r from-azul via-azul/80 to-azul/30" />
+              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-azul/60 to-transparent" />
+            </div>
+          )}
+
+          <div className="relative mx-auto max-w-6xl">
+            <div className="max-w-3xl">
               <nav aria-label="Você está em" className="font-sans text-xs font-semibold uppercase tracking-[0.2em]">
-                <ol className="flex flex-wrap items-center gap-2 text-white/50">
+                <ol className="flex flex-wrap items-center gap-2 text-white/60">
                   <li>
                     <Link href="/blog" className="text-dourado transition-colors hover:text-white">
                       Blog
@@ -78,8 +88,8 @@ export default async function Page({ params }: PageProps<"/blog/[slug]">) {
                 </ol>
               </nav>
               <h1 className="mt-4 font-display text-3xl leading-[1.15] text-white text-balance md:text-5xl">{post.titulo}</h1>
-              <p className="mt-5 font-sans text-base leading-relaxed text-white/70 md:text-lg">{post.resumo}</p>
-              <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 font-sans text-sm text-white/55">
+              <p className="mt-5 font-sans text-base leading-relaxed text-white/80 md:text-lg">{post.resumo}</p>
+              <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 font-sans text-sm text-white/65">
                 <span>{post.autor}</span>
                 <span aria-hidden="true">·</span>
                 <time dateTime={post.data}>{formatarData(post.data)}</time>
@@ -87,34 +97,20 @@ export default async function Page({ params }: PageProps<"/blog/[slug]">) {
                 <span>{post.minutos} min de leitura</span>
               </p>
             </div>
-
-            {post.capa && (
-              <figure>
-                <div className="relative aspect-[16/10] overflow-hidden rounded-3xl bg-white/5">
-                  <Image
-                    src={post.capa}
-                    alt={post.capaAlt}
-                    fill
-                    priority
-                    sizes="(min-width: 1024px) 540px, 100vw"
-                    className="object-cover"
-                  />
-                </div>
-                {post.capaCredito && (
-                  <figcaption className="mt-3 font-sans text-xs text-white/45">
-                    Foto:{" "}
-                    {post.capaLink ? (
-                      <a href={post.capaLink} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-white">
-                        {post.capaCredito} / Unsplash
-                      </a>
-                    ) : (
-                      post.capaCredito
-                    )}
-                  </figcaption>
-                )}
-              </figure>
-            )}
           </div>
+
+          {post.capa && post.capaCredito && (
+            <p className="absolute bottom-3 right-4 font-sans text-[11px] text-white/45 md:right-6">
+              Foto:{" "}
+              {post.capaLink ? (
+                <a href={post.capaLink} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-white">
+                  {post.capaCredito} / Unsplash
+                </a>
+              ) : (
+                post.capaCredito
+              )}
+            </p>
+          )}
         </header>
 
         <div className="px-6 py-12 md:py-16">
