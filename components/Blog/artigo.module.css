@@ -1,0 +1,58 @@
+/* Texto dos artigos (HTML gerado a partir do Markdown) */
+.artigo {
+  font-family: var(--font-urbanist), sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: rgb(13 27 42 / 0.82);
+}
+.artigo > * + * {
+  margin-top: 1.25em;
+}
+.artigo h2 {
+  margin-top: 2.2em;
+  font-family: var(--font-dream-avenue), serif;
+  font-size: 1.75rem;
+  line-height: 1.25;
+  color: #0d1b2a;
+  text-wrap: balance;
+}
+.artigo h3 {
+  margin-top: 1.8em;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0d1b2a;
+}
+.artigo strong {
+  font-weight: 700;
+  color: #0d1b2a;
+}
+.artigo a {
+  color: #8c6239;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.artigo a:hover {
+  color: #0d1b2a;
+}
+.artigo ul,
+.artigo ol {
+  padding-left: 1.4em;
+}
+.artigo ul {
+  list-style: disc;
+}
+.artigo ol {
+  list-style: decimal;
+}
+.artigo li + li {
+  margin-top: 0.5em;
+}
+.artigo li::marker {
+  color: #8c6239;
+}
+.artigo blockquote {
+  border-left: 3px solid #d1a875;
+  padding-left: 1.2em;
+  font-style: italic;
+}
