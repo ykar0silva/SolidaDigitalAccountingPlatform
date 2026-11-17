@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
 import { ferramentasDestaque, type FerramentaDestaque } from "@/data/ferramentasDestaque";
-import { posts } from "@/data/posts";
 import s from "./FerramentasDestaque.module.css";
 
 type Css = CSSProperties & Record<`--${string}`, string | number>;
@@ -147,8 +146,9 @@ const dataPost = (iso: string) =>
     new Date(`${iso}T12:00:00Z`)
   );
 
-function JanelaBlog() {
-  const post = posts[0];
+export type PostDestaque = { slug: string; titulo: string; categoria: string; data: string };
+
+function JanelaBlog({ post }: { post?: PostDestaque }) {
   return (
     <Janela titulo={`blog/${post?.slug ?? "artigo"}`}>
       <div className={s.barraTrilho} style={{ height: 3, marginBottom: 16 }}>
@@ -157,11 +157,11 @@ function JanelaBlog() {
       {post && (
         <>
           <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
-            <span className={cx(s.selo, s.seloAtencao)}>{post.category}</span>
-            <span className={s.rotulo}>{dataPost(post.date)}</span>
+            <span className={cx(s.selo, s.seloAtencao)}>{post.categoria}</span>
+            <span className={s.rotulo}>{dataPost(post.data)}</span>
           </div>
           <p style={{ marginTop: 10, fontSize: 17, fontWeight: 700, lineHeight: 1.3, textWrap: "balance" }}>
-            {post.title}
+            {post.titulo}
           </p>
         </>
       )}
@@ -223,7 +223,7 @@ function JanelaGlossario() {
   );
 }
 
-const janelas: Record<string, { Componente: () => ReactNode; ciclo: string }> = {
+const janelas: Record<string, { Componente: (props: { post?: PostDestaque }) => ReactNode; ciclo: string }> = {
   calculadoras: { Componente: JanelaCalculadora, ciclo: "7s" },
   diagnostico: { Componente: JanelaDiagnostico, ciclo: "8s" },
   blog: { Componente: JanelaBlog, ciclo: "7s" },
@@ -232,7 +232,7 @@ const janelas: Record<string, { Componente: () => ReactNode; ciclo: string }> = 
 
 /* ---------------- Painel: só anima quando está na tela ---------------- */
 
-function Painel({ ferramenta, tom }: { ferramenta: FerramentaDestaque; tom: "claro" | "escuro" }) {
+function Painel({ ferramenta, tom, post }: { ferramenta: FerramentaDestaque; tom: "claro" | "escuro"; post?: PostDestaque }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visivel, setVisivel] = useState(false);
   const [rodada, setRodada] = useState(0);
@@ -266,14 +266,14 @@ function Painel({ ferramenta, tom }: { ferramenta: FerramentaDestaque; tom: "cla
         <span className={s.cruz} style={{ left: 28, top: "calc(100% - 28px)" }} />
         <span className={s.cruz} style={{ left: "calc(100% - 28px)", top: "calc(100% - 28px)" }} />
       </div>
-      {janela && <janela.Componente key={rodada} />}
+      {janela && <janela.Componente key={rodada} post={post} />}
     </div>
   );
 }
 
 /* ---------------- Seção ---------------- */
 
-export default function FerramentasDestaque() {
+export default function FerramentasDestaque({ ultimoPost }: { ultimoPost?: PostDestaque }) {
   return (
     <section
       id="ferramentas"
@@ -311,7 +311,7 @@ export default function FerramentasDestaque() {
                     </span>
                   </Link>
                 </div>
-                <Painel ferramenta={f} tom={i % 2 === 0 ? "claro" : "escuro"} />
+                <Painel ferramenta={f} tom={i % 2 === 0 ? "claro" : "escuro"} post={ultimoPost} />
               </li>
             );
           })}
