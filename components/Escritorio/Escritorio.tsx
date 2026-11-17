@@ -18,14 +18,17 @@ import { useCarrosselInfinito } from "@/lib/useCarrosselInfinito";
 
 type Slide = FotoEscritorio | { src: null; alt: string; legenda: string };
 
-// Sem fotos ainda: molduras de exemplo, só no ambiente de desenvolvimento.
+// Sem fotos ainda: molduras de exemplo.
 const EXEMPLOS: Slide[] = ["Recepção", "Sala de reunião", "Atendimento", "Equipe", "Fachada"].map((legenda) => ({
   src: null,
   alt: legenda,
   legenda,
 }));
 
-const MOSTRAR_EXEMPLOS = process.env.NODE_ENV === "development";
+// Fase de apresentação: as molduras aparecem também no site publicado.
+// ANTES DE O SITE IR AO AR PARA CLIENTES, troque para
+// process.env.NODE_ENV === "development" (ou cadastre as fotos).
+const MOSTRAR_EXEMPLOS = true;
 const COPIAS = 4;
 const FUNDO = "/images/escritorio/fachada.webp"; // foto de fundo da seção // repetições da lista para nunca faltar foto na tela
 
