@@ -8,6 +8,10 @@
 // data: 2026-11-10
 // categoria: Imposto de Renda
 // autor: Equipe Sólida
+// capa: /images/blog/arquivo.webp   (imagem 16:10 em public/images/blog/)
+// capaAlt: descrição da imagem
+// capaCredito: Nome do fotógrafo     (opcional)
+// capaLink: https://unsplash.com/... (opcional, página da foto)
 // rascunho: false            (opcional; true esconde o post)
 // ---
 // Texto em Markdown (## para subtítulos, **negrito**, listas com -, links...)
@@ -26,6 +30,10 @@ export type PostResumo = {
   categoria: string;
   autor: string;
   minutos: number; // tempo de leitura
+  capa: string | null;
+  capaAlt: string;
+  capaCredito: string | null;
+  capaLink: string | null;
 };
 
 export type Post = PostResumo & { html: string };
@@ -61,6 +69,10 @@ function lerArquivo(arquivo: string): Post | null {
     categoria: dados.categoria ?? "Geral",
     autor: dados.autor ?? "Equipe Sólida",
     minutos: Math.max(1, Math.round(palavras / 200)),
+    capa: dados.capa || null,
+    capaAlt: dados.capaAlt ?? "",
+    capaCredito: dados.capaCredito || null,
+    capaLink: dados.capaLink || null,
     html: marked.parse(corpo, { async: false }) as string,
   };
 }
@@ -82,6 +94,10 @@ export function listarPosts(): PostResumo[] {
       categoria: p.categoria,
       autor: p.autor,
       minutos: p.minutos,
+      capa: p.capa,
+      capaAlt: p.capaAlt,
+      capaCredito: p.capaCredito,
+      capaLink: p.capaLink,
     }));
 }
 

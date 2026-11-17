@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import CardPost from "@/components/Blog/CardPost";
@@ -22,7 +23,13 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
   return {
     title: `${post.titulo} | Blog da Sólida`,
     description: post.resumo,
-    openGraph: { type: "article", title: post.titulo, description: post.resumo, publishedTime: post.data },
+    openGraph: {
+      type: "article",
+      title: post.titulo,
+      description: post.resumo,
+      publishedTime: post.data,
+      ...(post.capa ? { images: [{ url: post.capa, alt: post.capaAlt }] } : {}),
+    },
   };
 }
 
@@ -42,6 +49,7 @@ export default async function Page({ params }: PageProps<"/blog/[slug]">) {
     headline: post.titulo,
     description: post.resumo,
     datePublished: post.data,
+    ...(post.capa ? { image: `${URL_SITE}${post.capa}` } : {}),
     inLanguage: "pt-BR",
     author: { "@type": "Organization", name: "Sólida Assessoria Contábil" },
     publisher: { "@type": "Organization", name: "Sólida Assessoria Contábil" },
@@ -56,27 +64,56 @@ export default async function Page({ params }: PageProps<"/blog/[slug]">) {
 
       <article>
         <header className="bg-azul px-6 pb-14 pt-36 md:pb-16 md:pt-44">
-          <div className="mx-auto max-w-3xl">
-            <nav aria-label="Você está em" className="font-sans text-xs font-semibold uppercase tracking-[0.2em]">
-              <ol className="flex flex-wrap items-center gap-2 text-white/50">
-                <li>
-                  <Link href="/blog" className="text-dourado transition-colors hover:text-white">
-                    Blog
-                  </Link>
-                </li>
-                <li aria-hidden="true">/</li>
-                <li>{post.categoria}</li>
-              </ol>
-            </nav>
-            <h1 className="mt-4 font-display text-3xl leading-[1.15] text-white text-balance md:text-5xl">{post.titulo}</h1>
-            <p className="mt-5 font-sans text-base leading-relaxed text-white/70 md:text-lg">{post.resumo}</p>
-            <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 font-sans text-sm text-white/55">
-              <span>{post.autor}</span>
-              <span aria-hidden="true">·</span>
-              <time dateTime={post.data}>{formatarData(post.data)}</time>
-              <span aria-hidden="true">·</span>
-              <span>{post.minutos} min de leitura</span>
-            </p>
+          <div className={`mx-auto ${post.capa ? "grid max-w-6xl items-center gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14" : "max-w-3xl"}`}>
+            <div>
+              <nav aria-label="Você está em" className="font-sans text-xs font-semibold uppercase tracking-[0.2em]">
+                <ol className="flex flex-wrap items-center gap-2 text-white/50">
+                  <li>
+                    <Link href="/blog" className="text-dourado transition-colors hover:text-white">
+                      Blog
+                    </Link>
+                  </li>
+                  <li aria-hidden="true">/</li>
+                  <li>{post.categoria}</li>
+                </ol>
+              </nav>
+              <h1 className="mt-4 font-display text-3xl leading-[1.15] text-white text-balance md:text-5xl">{post.titulo}</h1>
+              <p className="mt-5 font-sans text-base leading-relaxed text-white/70 md:text-lg">{post.resumo}</p>
+              <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 font-sans text-sm text-white/55">
+                <span>{post.autor}</span>
+                <span aria-hidden="true">·</span>
+                <time dateTime={post.data}>{formatarData(post.data)}</time>
+                <span aria-hidden="true">·</span>
+                <span>{post.minutos} min de leitura</span>
+              </p>
+            </div>
+
+            {post.capa && (
+              <figure>
+                <div className="relative aspect-[16/10] overflow-hidden rounded-3xl bg-white/5">
+                  <Image
+                    src={post.capa}
+                    alt={post.capaAlt}
+                    fill
+                    priority
+                    sizes="(min-width: 1024px) 540px, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+                {post.capaCredito && (
+                  <figcaption className="mt-3 font-sans text-xs text-white/45">
+                    Foto:{" "}
+                    {post.capaLink ? (
+                      <a href={post.capaLink} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-white">
+                        {post.capaCredito} / Unsplash
+                      </a>
+                    ) : (
+                      post.capaCredito
+                    )}
+                  </figcaption>
+                )}
+              </figure>
+            )}
           </div>
         </header>
 

@@ -56,3 +56,57 @@
   padding-left: 1.2em;
   font-style: italic;
 }
+
+/* Tabelas */
+.artigo table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgb(13 27 42 / 0.1);
+  background: #fff;
+}
+.artigo thead th {
+  background: #0d1b2a;
+  color: #fff;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+.artigo th,
+.artigo td {
+  padding: 0.75em 1em;
+  border-bottom: 1px solid rgb(13 27 42 / 0.08);
+  font-variant-numeric: tabular-nums;
+}
+.artigo tbody tr:last-child td {
+  border-bottom: 0;
+}
+.artigo tbody tr:nth-child(even) td {
+  background: #fbf8f3;
+}
+
+/* Destaque (> citação) */
+.artigo blockquote {
+  border-left: 3px solid #d1a875;
+  background: #f6efe4;
+  border-radius: 0 16px 16px 0;
+  padding: 1em 1.2em;
+  font-style: normal;
+  color: #0d1b2a;
+}
+
+@media (max-width: 640px) {
+  .artigo table {
+    font-size: 0.82rem;
+  }
+  .artigo th,
+  .artigo td {
+    padding: 0.6em 0.55em;
+  }
+  .artigo thead th {
+    white-space: normal;
+  }
+}
